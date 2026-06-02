@@ -99,6 +99,7 @@
   tbody td.price-dealer { color: #7a8a93; }
   tbody td.stock-cell { text-align: center; }
   tbody td.stock-yes { color: #0a7140; font-weight: 600; }
+  tbody td.stock-available { color: #5b6671; font-weight: 600; cursor: help; }
   tbody td.stock-no { color: #a52424; }
 
   tbody td.actions { text-align: right; padding: 4px 8px; }
@@ -482,10 +483,13 @@
         return `<td class="${cls} copy-cell" data-copy="${escapeAttr(copyVal)}">${formatted}</td>`;
       }
       case 'stock': {
-        const inStock = (item.Stocked || '').toLowerCase() === 'yes';
-        const inv = item.Inventory;
-        const txt = inStock ? (inv != null && inv !== '' ? inv : '✓') : '—';
-        return `<td class="stock-cell ${inStock ? 'stock-yes' : 'stock-no'}">${escapeHtml(txt)}</td>`;
+        const n = Number(item.Inventory);
+        const has = Number.isFinite(n) && n > 0;
+        const onList = (item.Stocked || '').toLowerCase() === 'yes';
+        if (!has) return `<td class="stock-cell stock-no">—</td>`;
+        const cls = onList ? 'stock-yes' : 'stock-available';
+        const title = onList ? '' : ' title="Available at a distributor — not on our standard stocking list"';
+        return `<td class="stock-cell ${cls}"${title}>${escapeHtml(n)}</td>`;
       }
       case 'action':
         return `<td class="actions"><button type="button" class="open-drawer"${dataAttr}>View</button></td>`;
@@ -560,13 +564,26 @@
     });
 
     // Specs
+    const tdsQty = item.TDS_Inventory;
+    const imQty = item.INGRAM_Inventory;
+    const haveBreakdown = (tdsQty != null) || (imQty != null);
+    const totalLabel = item.Inventory != null
+      ? item.Inventory + ((item.Stocked || '').toLowerCase() === 'yes' ? '' : ' (not on our standard stocking list)')
+      : '—';
+    const tdsLabel = tdsQty != null
+      ? (tdsQty + (item.TDS_SKU ? ' · ' + item.TDS_SKU : ''))
+      : (item.TDS_SKU || '—');
+    const imLabel = imQty != null
+      ? (imQty + (item.INGRAM_SKU ? ' · ' + item.INGRAM_SKU : ''))
+      : (item.INGRAM_SKU || '—');
     const specFields = [
       ['Family', item.Family], ['Screen', item.ScreenSize], ['Color', item.Color],
       ['Chip', item.Processor], ['Memory', item.Memory], ['Storage', item.Storage],
       ['Power', item.Power], ['Nano-Texture', item.NanoTexture], ['Cellular', item.Cellular],
       ['Ethernet', item.Ethernet], ['Keyboard', item.Keyboard], ['Moveability', item.Moveability],
-      ['TDS SKU', item.TDS_SKU], ['INGRAM SKU', item.INGRAM_SKU],
-      ['Stock', item.Inventory != null ? item.Inventory + ((item.Stocked || '').toLowerCase() === 'yes' ? '' : ' (not stocked)') : '—'],
+      ['Stock — total', totalLabel],
+      haveBreakdown ? ['Stock — TDS', tdsLabel] : ['TDS SKU', item.TDS_SKU],
+      haveBreakdown ? ['Stock — Ingram', imLabel] : ['INGRAM SKU', item.INGRAM_SKU],
     ];
     document.getElementById('d-specs').innerHTML = specFields.filter(([_, v]) => v != null && v !== '').map(([k, v]) => `<div class="row"><div class="k">${k}</div><div class="v">${escapeHtml(v)}</div></div>`).join('');
 

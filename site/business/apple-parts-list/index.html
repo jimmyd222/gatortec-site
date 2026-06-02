@@ -562,22 +562,18 @@
     // Specs
     const tdsQty = item.TDS_Inventory;
     const imQty = item.INGRAM_Inventory;
-    const haveBreakdown = (tdsQty != null) || (imQty != null);
     const totalLabel = item.Inventory != null ? String(item.Inventory) : '—';
-    const tdsLabel = tdsQty != null
-      ? (tdsQty + (item.TDS_SKU ? ' | ' + item.TDS_SKU : ''))
-      : (item.TDS_SKU || '—');
-    const imLabel = imQty != null
-      ? (imQty + (item.INGRAM_SKU ? ' | ' + item.INGRAM_SKU : ''))
-      : (item.INGRAM_SKU || '—');
     const specFields = [
       ['Family', item.Family], ['Screen', item.ScreenSize], ['Color', item.Color],
       ['Chip', item.Processor], ['Memory', item.Memory], ['Storage', item.Storage],
       ['Power', item.Power], ['Nano-Texture', item.NanoTexture], ['Cellular', item.Cellular],
       ['Ethernet', item.Ethernet], ['Keyboard', item.Keyboard], ['Moveability', item.Moveability],
-      ['Stock — total', totalLabel],
-      haveBreakdown ? ['Stock — TDS', tdsLabel] : ['TDS SKU', item.TDS_SKU],
-      haveBreakdown ? ['Stock — Ingram', imLabel] : ['INGRAM SKU', item.INGRAM_SKU],
+      // Distributor stock — qty + SKU on separate rows so each value reads cleanly
+      ['Total stock', totalLabel],
+      ['TDS stock', tdsQty != null ? String(tdsQty) : (item.TDS_SKU ? '0' : null)],
+      ['TDS SKU', item.TDS_SKU],
+      ['Ingram stock', imQty != null ? String(imQty) : (item.INGRAM_SKU ? '0' : null)],
+      ['Ingram SKU', item.INGRAM_SKU],
     ];
     document.getElementById('d-specs').innerHTML = specFields.filter(([_, v]) => v != null && v !== '').map(([k, v]) => `<div class="row"><div class="k">${k}</div><div class="v">${escapeHtml(v)}</div></div>`).join('');
 

@@ -1,0 +1,331 @@
+{
+  "name": "GatorTec Contact Forms",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact-b2b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        200
+      ],
+      "id": "wh-b2b",
+      "name": "Webhook (B2B Form)",
+      "webhookId": "contact-b2b-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build TWO RFC822 messages per submission and return as separate items.\n// HTTP Request node iterates once per item → two emails sent.\nconst raw = $input.first().json.body || $input.first().json;\n\nfunction str(v) { return v == null ? '' : String(v).trim(); }\nfunction join(v) { if (Array.isArray(v)) return v.join(', '); return str(v); }\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;').replace(/'/g, '&#39;');\n}\nfunction encH(s) {\n  if (/[^\\x00-\\x7F]/.test(s)) return '=?UTF-8?B?' + Buffer.from(s, 'utf-8').toString('base64') + '?=';\n  return s;\n}\nfunction b64url(s) {\n  return Buffer.from(s, 'utf-8').toString('base64').replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n}\n\nconst data = {\n  name:      str(raw['Name']      || raw['name']),\n  company:   str(raw['Company']   || raw['company']),\n  email:     str(raw['email']     || raw['Email']),\n  phone:     str(raw['Phone']     || raw['phone']),\n  teamSize:  str(raw['Team Size'] || raw['team_size']),\n  timeline:  str(raw['Timeline']  || raw['timeline']),\n  interests: join(raw['Interests']|| raw['interests'] || raw['interests[]']),\n  message:   str(raw['Message']   || raw['message']),\n  gotcha:    str(raw['_gotcha']),\n};\n\nif (data.gotcha) return [{ json: { skip: true, reason: 'honeypot' } }];\nif (!data.email || !data.name || !data.message) throw new Error('Missing required fields: name, email, or message');\n\nconst firstName = data.name.split(/\\s+/)[0] || data.name;\nconst FROM_NAME = 'GatorTec B2B';\nconst FROM_EMAIL = 'b2b@gatortec.com';\nconst INTERNAL_EMAIL = 'b2b@gatortec.com';\n\nconst fieldRows = [\n  ['Name', data.name],\n  ['Company', data.company || '—'],\n  ['Email', data.email],\n  ['Phone', data.phone || '—'],\n  ['Team size', data.teamSize || '—'],\n  ['Timeline', data.timeline || '—'],\n  ['Interests', data.interests || '—'],\n];\n\nfunction rowsHtml(rows) {\n  return rows.map((r, i) => {\n    const bg = i % 2 === 0 ? '#f5f7fa' : '#ffffff';\n    return '<tr><td style=\"padding:11px 16px;color:#5b6671;font-weight:600;width:35%;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:13.5px\">' + esc(r[0]) + '</td><td style=\"padding:11px 16px;color:#1a1d21;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:14.5px\">' + esc(r[1]) + '</td></tr>';\n  }).join('');\n}\n\nfunction htmlShell(heading, intro, rows, msgLabel, msg, footerText) {\n  return '<!doctype html><html><body style=\"margin:0;padding:0;background:#f5f7fa;font-family:-apple-system,\\'Helvetica Neue\\',Arial,sans-serif;color:#1a1d21\">' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;background:#f5f7fa;padding:24px 0\"><tr><td align=\"center\">' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;max-width:620px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)\">' +\n    '<tr><td style=\"background:#0171B9;color:#ffffff;padding:22px 32px\">' +\n      '<div style=\"font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:4px\">GatorTec B2B</div>' +\n      '<div style=\"font-size:20px;font-weight:700\">' + esc(heading) + '</div>' +\n    '</td></tr>' +\n    '<tr><td style=\"padding:28px 32px 8px\">' +\n      '<p style=\"margin:0 0 22px;font-size:15px;line-height:1.55;color:#1a1d21\">' + intro + '</p>' +\n      '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid #dde1e6\">' +\n        rowsHtml(rows) +\n      '</table>' +\n      '<div style=\"margin-top:24px\">' +\n        '<div style=\"font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b6671;margin-bottom:8px\">' + esc(msgLabel) + '</div>' +\n        '<div style=\"background:#f5f7fa;border-left:3px solid #0171B9;padding:14px 18px;border-radius:6px;font-size:15px;line-height:1.55;color:#1a1d21;white-space:pre-wrap\">' + esc(msg) + '</div>' +\n      '</div>' +\n    '</td></tr>' +\n    '<tr><td style=\"padding:18px 32px 28px;border-top:1px solid #eceff2\">' +\n      '<p style=\"margin:0;font-size:12.5px;line-height:1.5;color:#8b95a0\">' + footerText + '</p>' +\n    '</td></tr>' +\n    '</table></td></tr></table></body></html>';\n}\n\nfunction plainBlock(title, intro, rows, msg, footer) {\n  const lines = [title, '', intro, ''];\n  for (const r of rows) lines.push(r[0] + ': ' + r[1]);\n  lines.push('', '— Message —', msg, '', '---', footer);\n  return lines.join('\\r\\n');\n}\n\nfunction buildRfc822({ fromName, fromEmail, to, replyTo, subject, html, plain }) {\n  const boundary = '----=_NextPart_' + Math.random().toString(36).slice(2, 14);\n  const headers = [\n    'From: \"' + fromName + '\" <' + fromEmail + '>',\n    'To: ' + to,\n    'Reply-To: ' + replyTo,\n    'Subject: ' + encH(subject),\n    'MIME-Version: 1.0',\n    'Content-Type: multipart/alternative; boundary=\"' + boundary + '\"',\n  ];\n  const body = [\n    '--' + boundary,\n    'Content-Type: text/plain; charset=UTF-8',\n    'Content-Transfer-Encoding: 8bit', '',\n    plain, '',\n    '--' + boundary,\n    'Content-Type: text/html; charset=UTF-8',\n    'Content-Transfer-Encoding: 8bit', '',\n    html, '',\n    '--' + boundary + '--',\n  ];\n  return b64url(headers.join('\\r\\n') + '\\r\\n\\r\\n' + body.join('\\r\\n'));\n}\n\n// === 1. CUSTOMER CONFIRMATION EMAIL ===\nconst custHtml = htmlShell(\n  'Thanks for reaching out',\n  'Hi ' + esc(firstName) + ' — a GatorTec account manager will be in touch soon. Here\\'s a copy of your submission for your records.',\n  fieldRows, 'Your message', data.message,\n  'Reply to this email to reach the GatorTec B2B team. Or call us at 352.505.9088.'\n);\nconst custPlain = plainBlock(\n  'Thanks for reaching out — GatorTec B2B',\n  'Hi ' + firstName + ' — a GatorTec account manager will be in touch soon. Here is a copy of your submission for your records.',\n  fieldRows, data.message,\n  'Reply to this email to reach the GatorTec B2B team. Or call us at 352.505.9088.'\n);\nconst custMsg = buildRfc822({\n  fromName: FROM_NAME, fromEmail: FROM_EMAIL,\n  to: data.email,\n  replyTo: '\"GatorTec B2B\" <' + FROM_EMAIL + '>',\n  subject: 'Thanks — we got your inquiry',\n  html: custHtml, plain: custPlain,\n});\n\n// === 2. INTERNAL NOTIFICATION EMAIL ===\nconst internalHtml = htmlShell(\n  'New B2B inquiry',\n  'A new B2B inquiry came in via the gatortec.com contact form. Hit reply to respond directly to <strong>' + esc(data.name) + '</strong> &lt;' + esc(data.email) + '&gt;.',\n  fieldRows, 'Message from customer', data.message,\n  'Reply to this email to respond to the customer. They\\'ll receive your reply directly.'\n);\nconst internalPlain = plainBlock(\n  'New B2B inquiry — gatortec.com contact form',\n  'A new B2B inquiry came in. Reply to this email to respond directly to ' + data.name + ' <' + data.email + '>.',\n  fieldRows, data.message,\n  'Reply to this email to respond to the customer. They will receive your reply directly.'\n);\nconst internalMsg = buildRfc822({\n  fromName: FROM_NAME, fromEmail: FROM_EMAIL,\n  to: INTERNAL_EMAIL,\n  replyTo: '\"' + data.name + '\" <' + data.email + '>',\n  subject: 'New B2B inquiry — ' + (data.company ? data.company + ' (' + data.name + ')' : data.name),\n  html: internalHtml, plain: internalPlain,\n});\n\nreturn [\n  { json: { skip: false, raw: custMsg, kind: 'customer' } },\n  { json: { skip: false, raw: internalMsg, kind: 'internal' } },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        200
+      ],
+      "id": "code-b2b",
+      "name": "Code (Build B2B Message)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "false"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        200
+      ],
+      "id": "if-b2b",
+      "name": "If not honeypot (B2B)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ raw: $json.raw }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        860,
+        100
+      ],
+      "id": "http-b2b",
+      "name": "Send via Gmail API (B2B)",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hY2enj3jpAfraW2D",
+          "name": "Jim @ GatorTec"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "redirect",
+        "redirectURL": "https://gatortec.com/contact/thanks.html",
+        "options": {
+          "responseCode": 303
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1080,
+        200
+      ],
+      "id": "respond-b2b",
+      "name": "Redirect to Thanks (B2B)"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "contact-store",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        600
+      ],
+      "id": "wh-store",
+      "name": "Webhook (Consumer Form)",
+      "webhookId": "contact-store-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build TWO RFC822 messages per submission and return as separate items.\nconst raw = $input.first().json.body || $input.first().json;\n\nfunction str(v) { return v == null ? '' : String(v).trim(); }\nfunction join(v) { if (Array.isArray(v)) return v.join(', '); return str(v); }\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;').replace(/'/g, '&#39;');\n}\nfunction encH(s) {\n  if (/[^\\x00-\\x7F]/.test(s)) return '=?UTF-8?B?' + Buffer.from(s, 'utf-8').toString('base64') + '?=';\n  return s;\n}\nfunction b64url(s) {\n  return Buffer.from(s, 'utf-8').toString('base64').replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n}\n\nconst data = {\n  name:      str(raw['Name']      || raw['name']),\n  email:     str(raw['email']     || raw['Email']),\n  phone:     str(raw['Phone']     || raw['phone']),\n  interests: join(raw['Interests']|| raw['interests'] || raw['interests[]']),\n  message:   str(raw['Message']   || raw['message']),\n  gotcha:    str(raw['_gotcha']),\n};\n\nif (data.gotcha) return [{ json: { skip: true, reason: 'honeypot' } }];\nif (!data.email || !data.name || !data.message) throw new Error('Missing required fields: name, email, or message');\n\nconst firstName = data.name.split(/\\s+/)[0] || data.name;\nconst FROM_NAME = 'GatorTec Store';\nconst FROM_EMAIL = 'store@gatortec.com';\nconst INTERNAL_EMAIL = 'store@gatortec.com';\n\nconst fieldRows = [\n  ['Name', data.name],\n  ['Email', data.email],\n  ['Phone', data.phone || '—'],\n  ['Interests', data.interests || '—'],\n];\n\nfunction rowsHtml(rows) {\n  return rows.map((r, i) => {\n    const bg = i % 2 === 0 ? '#f5f7fa' : '#ffffff';\n    return '<tr><td style=\"padding:11px 16px;color:#5b6671;font-weight:600;width:35%;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:13.5px\">' + esc(r[0]) + '</td><td style=\"padding:11px 16px;color:#1a1d21;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:14.5px\">' + esc(r[1]) + '</td></tr>';\n  }).join('');\n}\n\nfunction htmlShell(heading, intro, rows, msgLabel, msg, footerText) {\n  return '<!doctype html><html><body style=\"margin:0;padding:0;background:#f5f7fa;font-family:-apple-system,\\'Helvetica Neue\\',Arial,sans-serif;color:#1a1d21\">' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;background:#f5f7fa;padding:24px 0\"><tr><td align=\"center\">' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;max-width:620px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)\">' +\n    '<tr><td style=\"background:#0171B9;color:#ffffff;padding:22px 32px\">' +\n      '<div style=\"font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:4px\">GatorTec Store</div>' +\n      '<div style=\"font-size:20px;font-weight:700\">' + esc(heading) + '</div>' +\n    '</td></tr>' +\n    '<tr><td style=\"padding:28px 32px 8px\">' +\n      '<p style=\"margin:0 0 22px;font-size:15px;line-height:1.55;color:#1a1d21\">' + intro + '</p>' +\n      '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid #dde1e6\">' +\n        rowsHtml(rows) +\n      '</table>' +\n      '<div style=\"margin-top:24px\">' +\n        '<div style=\"font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b6671;margin-bottom:8px\">' + esc(msgLabel) + '</div>' +\n        '<div style=\"background:#f5f7fa;border-left:3px solid #0171B9;padding:14px 18px;border-radius:6px;font-size:15px;line-height:1.55;color:#1a1d21;white-space:pre-wrap\">' + esc(msg) + '</div>' +\n      '</div>' +\n    '</td></tr>' +\n    '<tr><td style=\"padding:18px 32px 28px;border-top:1px solid #eceff2\">' +\n      '<p style=\"margin:0;font-size:12.5px;line-height:1.5;color:#8b95a0\">' + footerText + '</p>' +\n    '</td></tr>' +\n    '</table></td></tr></table></body></html>';\n}\n\nfunction plainBlock(title, intro, rows, msg, footer) {\n  const lines = [title, '', intro, ''];\n  for (const r of rows) lines.push(r[0] + ': ' + r[1]);\n  lines.push('', '— Message —', msg, '', '---', footer);\n  return lines.join('\\r\\n');\n}\n\nfunction buildRfc822({ fromName, fromEmail, to, replyTo, subject, html, plain }) {\n  const boundary = '----=_NextPart_' + Math.random().toString(36).slice(2, 14);\n  const headers = [\n    'From: \"' + fromName + '\" <' + fromEmail + '>',\n    'To: ' + to,\n    'Reply-To: ' + replyTo,\n    'Subject: ' + encH(subject),\n    'MIME-Version: 1.0',\n    'Content-Type: multipart/alternative; boundary=\"' + boundary + '\"',\n  ];\n  const body = [\n    '--' + boundary,\n    'Content-Type: text/plain; charset=UTF-8',\n    'Content-Transfer-Encoding: 8bit', '',\n    plain, '',\n    '--' + boundary,\n    'Content-Type: text/html; charset=UTF-8',\n    'Content-Transfer-Encoding: 8bit', '',\n    html, '',\n    '--' + boundary + '--',\n  ];\n  return b64url(headers.join('\\r\\n') + '\\r\\n\\r\\n' + body.join('\\r\\n'));\n}\n\n// Customer confirmation\nconst custHtml = htmlShell(\n  'Thanks for reaching out',\n  'Hi ' + esc(firstName) + ' — a GatorTec expert will be in touch soon. Here\\'s a copy of your submission for your records.',\n  fieldRows, 'Your message', data.message,\n  'Reply to this email to reach the GatorTec Store team. Or call us at 352.505.7582.'\n);\nconst custPlain = plainBlock(\n  'Thanks for reaching out — GatorTec Store',\n  'Hi ' + firstName + ' — a GatorTec expert will be in touch soon. Here is a copy of your submission for your records.',\n  fieldRows, data.message,\n  'Reply to this email to reach the GatorTec Store team. Or call us at 352.505.7582.'\n);\nconst custMsg = buildRfc822({\n  fromName: FROM_NAME, fromEmail: FROM_EMAIL,\n  to: data.email,\n  replyTo: '\"GatorTec Store\" <' + FROM_EMAIL + '>',\n  subject: 'Thanks — we got your message',\n  html: custHtml, plain: custPlain,\n});\n\n// Internal notification\nconst internalHtml = htmlShell(\n  'New consumer inquiry',\n  'A new inquiry came in via the gatortec.com home contact form. Hit reply to respond directly to <strong>' + esc(data.name) + '</strong> &lt;' + esc(data.email) + '&gt;.',\n  fieldRows, 'Message from customer', data.message,\n  'Reply to this email to respond to the customer. They\\'ll receive your reply directly.'\n);\nconst internalPlain = plainBlock(\n  'New consumer inquiry — gatortec.com',\n  'A new inquiry came in. Reply to this email to respond directly to ' + data.name + ' <' + data.email + '>.',\n  fieldRows, data.message,\n  'Reply to this email to respond to the customer. They will receive your reply directly.'\n);\nconst internalMsg = buildRfc822({\n  fromName: FROM_NAME, fromEmail: FROM_EMAIL,\n  to: INTERNAL_EMAIL,\n  replyTo: '\"' + data.name + '\" <' + data.email + '>',\n  subject: 'New consumer inquiry — ' + data.name,\n  html: internalHtml, plain: internalPlain,\n});\n\nreturn [\n  { json: { skip: false, raw: custMsg, kind: 'customer' } },\n  { json: { skip: false, raw: internalMsg, kind: 'internal' } },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        600
+      ],
+      "id": "code-store",
+      "name": "Code (Build Store Message)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "false"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        600
+      ],
+      "id": "if-store",
+      "name": "If not honeypot (Store)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ raw: $json.raw }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        860,
+        500
+      ],
+      "id": "http-store",
+      "name": "Send via Gmail API (Store)",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hY2enj3jpAfraW2D",
+          "name": "Jim @ GatorTec"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "redirect",
+        "redirectURL": "https://gatortec.com/contact/thanks.html",
+        "options": {
+          "responseCode": 303
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1080,
+        600
+      ],
+      "id": "respond-store",
+      "name": "Redirect to Thanks (Store)"
+    }
+  ],
+  "connections": {
+    "Webhook (B2B Form)": {
+      "main": [
+        [
+          {
+            "node": "Code (Build B2B Message)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Build B2B Message)": {
+      "main": [
+        [
+          {
+            "node": "If not honeypot (B2B)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If not honeypot (B2B)": {
+      "main": [
+        [
+          {
+            "node": "Send via Gmail API (B2B)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redirect to Thanks (B2B)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send via Gmail API (B2B)": {
+      "main": [
+        [
+          {
+            "node": "Redirect to Thanks (B2B)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (Consumer Form)": {
+      "main": [
+        [
+          {
+            "node": "Code (Build Store Message)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Build Store Message)": {
+      "main": [
+        [
+          {
+            "node": "If not honeypot (Store)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If not honeypot (Store)": {
+      "main": [
+        [
+          {
+            "node": "Send via Gmail API (Store)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redirect to Thanks (Store)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send via Gmail API (Store)": {
+      "main": [
+        [
+          {
+            "node": "Redirect to Thanks (Store)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/New_York"
+  },
+  "active": false,
+  "meta": {
+    "description": "GatorTec contact form handler — replaces Formspree.\n\nTwo webhook endpoints:\n  - /webhook/contact-b2b  — receives B2B form posts\n  - /webhook/contact-store — receives consumer/home form posts\n\nFor each:\n  1. Webhook receives the form-encoded POST\n  2. Code node parses fields, honeypot-checks, builds an RFC822 MIME message with From: b2b@/store@\n  3. IF node skips on honeypot detection\n  4. HTTP Request POSTs the raw message to gmail.googleapis.com/v1/users/me/messages/send using Jim's Gmail OAuth credential\n     (Gmail honors the From header because b2b@ and store@ are verified Send-As aliases on Jim's account)\n  5. Respond node returns 303 redirect to /contact/thanks.html\n\nEmail shape:\n  From:     GatorTec B2B <b2b@gatortec.com>  (or 'GatorTec Store <store@gatortec.com>')\n  To:       customer\n  Cc:       b2b@ (or store@) — internal copy\n  Reply-To: customer email\n  Subject:  'New B2B inquiry — Company (Name)' or 'New consumer inquiry — Name'\n  Body:     Plain text with all form fields\n\nSetup:\n  1. Import this JSON\n  2. Confirm the Gmail OAuth credential is Jim's account (credentials id may differ in your instance)\n  3. Activate the workflow\n  4. Test with a real form submission from the site\n\nWhy HTTP Request instead of the Gmail node: n8n's Gmail node in some versions doesn't expose the 'From' header for Send-As aliases. Calling the Gmail REST API directly via HTTP Request gives us full control of the message envelope — the OAuth credential authenticates as jim@, but the From header can be any verified alias (b2b@ or store@)."
+  }
+}

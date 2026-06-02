@@ -1,0 +1,284 @@
+[
+  {
+    "table": "wp_wpdatatable_1",
+    "rows": 172,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "screensize",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "power"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_4",
+    "rows": 328,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "screensize",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "power",
+      "nanotexture"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_5",
+    "rows": 476,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "nanotexture",
+      "ethernet",
+      "keyboard"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_6",
+    "rows": 84,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "ethernet"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_7",
+    "rows": 49,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "processor",
+      "memory",
+      "storage"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_8",
+    "rows": 71,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "processor",
+      "memory",
+      "storage",
+      "movability"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_9",
+    "rows": 152,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "description",
+      "ipadtype",
+      "color",
+      "storage",
+      "nanotexture",
+      "cellular"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_10",
+    "rows": 360,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "screensize",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "power",
+      "nanotexture",
+      "stocked"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_11",
+    "rows": 368,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "screensize",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "power",
+      "stocked"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_12",
+    "rows": 536,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "screensize",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "power",
+      "nanotexture",
+      "stocked"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_13",
+    "rows": 144,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "color",
+      "processor",
+      "memory",
+      "storage",
+      "stocked"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_14",
+    "rows": 131,
+    "columns": [
+      "stocked",
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "color",
+      "processor",
+      "memory",
+      "storage"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_15",
+    "rows": 105,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "processor",
+      "memory",
+      "storage",
+      "stocked"
+    ]
+  },
+  {
+    "table": "wp_wpdatatable_18",
+    "rows": 226,
+    "columns": [
+      "wdt_ID",
+      "wdt_created_by",
+      "wdt_created_at",
+      "wdt_last_edited_by",
+      "wdt_last_edited_at",
+      "applepart",
+      "msrp",
+      "dealerb",
+      "description",
+      "ipadtype",
+      "color",
+      "storage",
+      "nanotexture",
+      "cellular"
+    ]
+  }
+]

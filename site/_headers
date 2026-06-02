@@ -1,0 +1,19 @@
+# Default security headers for all pages
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Aggressive cache for static assets (images, fonts, CSS, JS)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Moderate cache for JSON data (updated daily by n8n)
+/assets/data/*
+  Cache-Control: public, max-age=3600
+
+# No cache for HTML — always fetch latest
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

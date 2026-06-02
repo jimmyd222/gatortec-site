@@ -1,0 +1,16 @@
+{
+  "name": "2026-rebuild",
+  "version": "1.0.0",
+  "description": "This folder contains everything needed to build the new GatorTec static website. **Start by reading `GatorTec-Build-Brief.md` (the spec) and `gatortec-rebuild-mockup.html` (the visual direction).**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

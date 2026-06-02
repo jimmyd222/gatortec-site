@@ -1,0 +1,63 @@
+@font-face {
+  font-family: 'promote';
+  src:  url('fonts/promote.eot?ckdau8');
+  src:  url('fonts/promote.eot?ckdau8#iefix') format('embedded-opentype'),
+    url('fonts/promote.ttf?ckdau8') format('truetype'),
+    url('fonts/promote.woff?ckdau8') format('woff'),
+    url('fonts/promote.svg?ckdau8#promote') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="promote-"], [class*=" promote-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'promote' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.promote-compass:before {
+  content: "\e90b";
+}
+.promote-infinite:before {
+  content: "\e900";
+}
+.promote-phone:before {
+  content: "\e901";
+}
+.promote-home:before {
+  content: "\e902";
+}
+.promote-link:before {
+  content: "\e903";
+}
+.promote-database:before {
+  content: "\e904";
+}
+.promote-lightbulb-o:before {
+  content: "\e905";
+}
+.promote-envelope-o:before {
+  content: "\e906";
+}
+.promote-rocket:before {
+  content: "\e907";
+}
+.promote-close:before {
+  content: "\e908";
+}
+.promote-menu:before {
+  content: "\e909";
+}
+.promote-add:before {
+  content: "\e90a";
+}

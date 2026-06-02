@@ -1,0 +1,480 @@
+{
+  "name": "MarkIT Inventory Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        -48
+      ],
+      "id": "c93a2c38-52f6-4002-a238-36c061359bb5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ",
+          "mode": "list",
+          "cachedResultName": "GatorTec Parts & Customers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 57477896,
+          "mode": "list",
+          "cachedResultName": "MarkIT CSV Setup",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ/edit#gid=57477896"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3904,
+        -48
+      ],
+      "id": "87819391-4f66-465f-9163-5c28b54c9f92",
+      "name": "Google Sheets (Read)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SH3KragVhEnhfwCY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ingrammicro.com:443/oauth/oauth20/token",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/x-www-form-urlencoded",
+        "body": "grant_type=client_credentials&client_id=kjEBAz3MjC5LFo2QhFFxKKBI7oYIvp7m&client_secret=itu5pX30KGtqv3Oc",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4208,
+        -48
+      ],
+      "id": "784dd104-dbb9-4b2a-905e-90e5d4777246",
+      "name": "HTTP Request (Get IM Token)",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const products = $('Google Sheets (Read)').all();\nconst imToken = $input.first().json.access_token;\nconst BATCH_SIZE = 50;\nconst batches = [];\n\nfor (let i = 0; i < products.length; i += BATCH_SIZE) {\n  const batch = products.slice(i, i + BATCH_SIZE);\n\n  // Build TDS XML with multiple skuList entries\n  let lineNum = 0;\n  const skuEntries = [];\n  for (const p of batch) {\n    const tdsSku = String(p.json['TDS SKU'] || '').trim();\n    if (tdsSku) {\n      lineNum++;\n      skuEntries.push(\n        '    <skuList>' +\n        '<synnexSKU>' + tdsSku + '</synnexSKU>' +\n        '<lineNumber>' + lineNum + '</lineNumber>' +\n        '</skuList>'\n      );\n    }\n  }\n\n  const tdsXml =\n    '<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\\n' +\n    '<priceRequest>\\n' +\n    '  <customerNo>571788</customerNo>\\n' +\n    '  <userName>jim@gatortec.com</userName>\\n' +\n    '  <password>Yi-TqD22mzU_RW.h</password>\\n' +\n    skuEntries.join('\\n') + '\\n' +\n    '</priceRequest>';\n\n  // Build Ingram Micro products array\n  const imProducts = [];\n  for (const p of batch) {\n    const imSku = String(p.json['INGRAM SKU'] || '').trim();\n    if (imSku) {\n      imProducts.push({ ingramPartNumber: imSku });\n    }\n  }\n  const imBody = JSON.stringify({ products: imProducts });\n\n  // Track products for result mapping\n  const batchProducts = batch.map((p, idx) => ({\n    rowIndex: i + idx + 2,\n    sku: p.json['SKU'],\n    tdsSku: String(p.json['TDS SKU'] || '').trim(),\n    ingramSku: String(p.json['INGRAM SKU'] || '').trim()\n  }));\n\n  batches.push({\n    json: {\n      tdsXml,\n      imBody,\n      imToken,\n      batchProducts,\n      batchIndex: Math.floor(i / BATCH_SIZE)\n    }\n  });\n}\n\nreturn batches;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4512,
+        -48
+      ],
+      "id": "d19ffdc1-85a9-49ba-95e8-27e7dd09ceb6",
+      "name": "Code (Prepare Batches)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ec.us.tdsynnex.com/SynnexXML/PriceAvailability",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/xml",
+        "body": "={{ $json.tdsXml }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4800,
+        -48
+      ],
+      "id": "c7fcb34d-e02d-4b3a-86ca-2b9cfc5647dd",
+      "name": "HTTP Request (TDS)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const tdsResponses = $input.all();\nconst allBatches = $('Code (Prepare Batches)').all();\nconst results = [];\n\nfor (let i = 0; i < tdsResponses.length; i++) {\n  const response = String(tdsResponses[i].json.data || '');\n  const batch = allBatches[i].json;\n  const tdsInventory = {};\n\n  // Parse each item block in TDS response\n  const blockRegex = /<PriceAvailabilityList>[\\s\\S]*?<\\/PriceAvailabilityList>/g;\n  let block;\n\n  while ((block = blockRegex.exec(response)) !== null) {\n    const skuMatch = block[0].match(/<synnexSKU>(\\S+?)<\\/synnexSKU>/);\n    if (!skuMatch) continue;\n\n    const sku = skuMatch[1];\n    let total = 0;\n\n    // Sum warehouse quantities\n    const qtyRegex = /<qty>(\\d+)<\\/qty>/g;\n    let qtyMatch;\n    while ((qtyMatch = qtyRegex.exec(block[0])) !== null) {\n      total += parseInt(qtyMatch[1]) || 0;\n    }\n\n    tdsInventory[sku] = total;\n  }\n\n  results.push({\n    json: {\n      tdsInventory,\n      imBody: batch.imBody,\n      imToken: batch.imToken,\n      batchProducts: batch.batchProducts\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5104,
+        -48
+      ],
+      "id": "4b87a67c-4fd3-4a3c-bc21-eeeea966d659",
+      "name": "Code (Parse TDS)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ingrammicro.com:443/resellers/v6/catalog/priceandavailability?includeAvailability=true&includePricing=false",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $json.imToken }}"
+            },
+            {
+              "name": "IM-CustomerNumber",
+              "value": "70-137682"
+            },
+            {
+              "name": "IM-CountryCode",
+              "value": "US"
+            },
+            {
+              "name": "IM-CorrelationID",
+              "value": "={{ Date.now().toString() + '-' + Math.random().toString(36).substr(2, 6) }}"
+            },
+            {
+              "name": "IM-SenderID",
+              "value": "MarkIT"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.imBody }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5408,
+        -48
+      ],
+      "id": "1c0e14d2-b707-4b87-b4af-fc809fff8710",
+      "name": "HTTP Request (Ingram)",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n splits Ingram JSON array responses into individual items,\n// so we can't match by index. Build global maps instead.\n\n// 1. Build global IM inventory map from ALL split response items\nconst imItems = $input.all();\nconst imInventory = {};\n\nfor (const item of imItems) {\n  const data = item.json;\n  if (data && data.ingramPartNumber && data.availability) {\n    imInventory[data.ingramPartNumber] = data.availability.totalAvailability || 0;\n  }\n}\n\n// 2. Build global TDS inventory map from all batch parse results\nconst tdsBatches = $('Code (Parse TDS)').all();\nconst tdsInventory = {};\n\nfor (const batch of tdsBatches) {\n  const batchInv = batch.json.tdsInventory || {};\n  for (const [sku, qty] of Object.entries(batchInv)) {\n    tdsInventory[sku] = qty;\n  }\n}\n\n// 3. Get all products from batch metadata\nconst allBatches = $('Code (Prepare Batches)').all();\nconst combined = [];\n\nfor (const batch of allBatches) {\n  for (const p of batch.json.batchProducts) {\n    combined.push({\n      rowIndex: p.rowIndex,\n      sku: p.sku,\n      totalInventory: (tdsInventory[p.tdsSku] || 0) + (imInventory[p.ingramSku] || 0)\n    });\n  }\n}\n\nreturn [{ json: { combined } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5712,
+        -48
+      ],
+      "id": "e83c633f-adb4-44f1-b40b-f66bc19a0ce7",
+      "name": "Code (Parse IM + Combine)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allBatches = $input.all();\nconst products = $('Google Sheets (Read)').all();\nconst totalRows = products.length;\n\n// Flatten all batch results into rowIndex -> inventory map\nconst inventoryMap = {};\nfor (const batch of allBatches) {\n  for (const item of batch.json.combined) {\n    inventoryMap[item.rowIndex] = item.totalInventory;\n  }\n}\n\n// Build values array for column U (in row order)\nconst values = [];\nfor (let row = 2; row <= totalRows + 1; row++) {\n  values.push([inventoryMap[row] !== undefined ? inventoryMap[row] : 0]);\n}\n\nconst range = \"'MarkIT CSV Setup'!U2:U\" + (totalRows + 1);\nconst url = 'https://sheets.googleapis.com/v4/spreadsheets/1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ/values/' + encodeURIComponent(range) + '?valueInputOption=RAW';\n\nreturn [{ json: { url, body: JSON.stringify({ values }), totalRows, inventoryMap } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6000,
+        -48
+      ],
+      "id": "4eb177da-18f4-4441-93f1-456b7d051d04",
+      "name": "Code (Prepare Sheet Update)"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        6304,
+        -48
+      ],
+      "id": "7e89181c-4f0b-42fb-adf5-377a5b4bb45b",
+      "name": "HTTP Request (Update Sheet)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SH3KragVhEnhfwCY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const products = $('Google Sheets (Read)').all();\nconst inventoryMap = $('Code (Prepare Sheet Update)').first().json.inventoryMap;\n\n// CSV columns: all EXCEPT D (MSRP), E (Dealer B), S (TDS SKU), T (INGRAM SKU)\nconst includeKeys = [\n  'Family', 'SKU', 'Price', 'Description', 'Screen Size', 'Color',\n  'Processor', 'Memory', 'Storage', 'Power', 'Nano-Texture', 'Cellular',\n  'Ethernet', 'Keyboard', 'Moveability', 'Stocked'\n];\nconst headers = [...includeKeys, 'Inventory'];\n\nfunction escapeCSV(val) {\n  const str = String(val === null || val === undefined ? '' : val).replace(/\\r/g, '').replace(/[\\u2010\\u2011\\u2012\\u2013\\u2014\\u2015\\uFE58\\uFE63\\uFF0D]/g, '-');\n  if (str.includes(',') || str.includes('\"') || str.includes('\\n')) {\n    return '\"' + str.replace(/\"/g, '\"\"') + '\"';\n  }\n  return str;\n}\n\nconst rows = [headers.map(escapeCSV).join(',')];\n\nfor (let i = 0; i < products.length; i++) {\n  const p = products[i].json;\n  const rowIndex = i + 2;\n  const inventory = inventoryMap[rowIndex] !== undefined ? inventoryMap[rowIndex] : 0;\n\n  const values = includeKeys.map(key => {\n    if (key === 'Price' && p[key] !== '' && p[key] !== null && p[key] !== undefined) {\n      return escapeCSV(Number(p[key]).toFixed(2));\n    }\n    return escapeCSV(p[key]);\n  });\n  values.push(escapeCSV(inventory));\n  rows.push(values.join(','));\n}\n\nconst csv = rows.join('\\n');\nconst base64 = Buffer.from(csv, 'utf-8').toString('base64');\n\nconst today = new Date();\nconst dateStr = String(today.getMonth() + 1).padStart(2, '0') + '-' +\n  String(today.getDate()).padStart(2, '0') + '-' + today.getFullYear();\n\nreturn [{\n  json: { dateStr },\n  binary: {\n    data: {\n      data: base64,\n      mimeType: 'text/csv',\n      fileName: 'GatorTec-Apple-Inventory-' + dateStr + '.csv',\n      fileExtension: 'csv'\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6608,
+        -48
+      ],
+      "id": "8681c1c2-b5f6-4667-8719-7c456ae2792c",
+      "name": "Code (Build CSV)"
+    },
+    {
+      "parameters": {
+        "sendTo": "edi+GATUS@markit.eu, consumerjim@me.com",
+        "subject": "=GatorTec Daily Apple Inventory Report - {{ $json.dateStr }}",
+        "emailType": "text",
+        "message": "Good morning,\n\nPlease find attached today's Apple inventory report.\n\nThis report is generated automatically each morning at 7:00 AM.\n\nBest regards,\nGatorTec Inventory System",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        6912,
+        -48
+      ],
+      "id": "42723dab-57f6-4524-b28f-8f351c0d8a6f",
+      "name": "Gmail (Send Report)",
+      "webhookId": "b567d8be-6d9d-4a62-accd-a4f505c15b12",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hY2enj3jpAfraW2D",
+          "name": "Jim @ GatorTec"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        352
+      ],
+      "id": "aad04849-61e8-4191-8aad-b64a0519f990",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const error = $input.first().json;\n\nconst nodeName = error.execution?.lastNodeExecuted || 'Unknown node';\nconst errorMsg = error.execution?.error?.message || 'Unknown error';\nconst workflowName = error.workflow?.name || 'MarkIT Inventory Report';\nconst executionId = error.execution?.id || 'N/A';\n\nconst today = new Date();\nconst dateStr = String(today.getMonth() + 1).padStart(2, '0') + '-' +\n  String(today.getDate()).padStart(2, '0') + '-' + today.getFullYear();\nconst timeStr = today.toLocaleTimeString('en-US');\n\nconst body = 'The workflow \"' + workflowName + '\" failed on ' + dateStr + ' at ' + timeStr + '.\\n\\n' +\n  'Failed Node: ' + nodeName + '\\n' +\n  'Error: ' + errorMsg + '\\n' +\n  'Execution ID: ' + executionId + '\\n\\n' +\n  'Please check the n8n dashboard for full details.';\n\nreturn [{ json: { subject: 'ALERT: MarkIT Inventory Report Failed - ' + dateStr, body } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3904,
+        352
+      ],
+      "id": "a697e8cc-bb52-4c8b-a06c-7345ceb555fe",
+      "name": "Code (Format Error)"
+    },
+    {
+      "parameters": {
+        "sendTo": "consumerjim@me.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        4208,
+        352
+      ],
+      "id": "d2252b96-c336-40bc-a435-ae836146ebc7",
+      "name": "Gmail (Error Alert)",
+      "webhookId": "a7c9305e-0a11-422c-9c4b-466a6e0c29d2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "hY2enj3jpAfraW2D",
+          "name": "Jim @ GatorTec"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets (Read)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets (Read)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (Get IM Token)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (Get IM Token)": {
+      "main": [
+        [
+          {
+            "node": "Code (Prepare Batches)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Prepare Batches)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (TDS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (TDS)": {
+      "main": [
+        [
+          {
+            "node": "Code (Parse TDS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Parse TDS)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (Ingram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (Ingram)": {
+      "main": [
+        [
+          {
+            "node": "Code (Parse IM + Combine)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Parse IM + Combine)": {
+      "main": [
+        [
+          {
+            "node": "Code (Prepare Sheet Update)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Prepare Sheet Update)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (Update Sheet)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (Update Sheet)": {
+      "main": [
+        [
+          {
+            "node": "Code (Build CSV)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Build CSV)": {
+      "main": [
+        [
+          {
+            "node": "Gmail (Send Report)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code (Format Error)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Format Error)": {
+      "main": [
+        [
+          {
+            "node": "Gmail (Error Alert)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "99648cae-afa6-4dfe-9d79-6526bb01373e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "696a0ba8a4fcd1dee21720b36348953d9076e384585687a59b8ff11fea8545ee"
+  },
+  "id": "XVPsCTwIsFSlra5X",
+  "tags": []
+}

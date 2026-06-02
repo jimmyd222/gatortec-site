@@ -1,0 +1,48 @@
+/* GatorTec design tokens — single source of truth.
+   Brand blue extracted from logo. Manrope display + body.
+   Contrast verified: blue #0171B9 on white = 4.65:1 (AA for normal text).
+   Slate #5b6671 on white = 5.74:1. Ink #1a1d21 on white = 16.4:1. */
+:root {
+  /* Brand */
+  --blue: #0171B9;
+  --blue-deep: #005a94;
+  --blue-ink: #073b5e;
+  --blue-tint: rgba(1, 113, 185, 0.10);
+
+  /* Neutrals */
+  --ink: #1a1d21;
+  --slate: #5b6671;
+  --slate-soft: #8b95a0;
+  --mist: #eceff2;
+  --paper: #f5f6f8;
+  --white: #ffffff;
+  --line: #dde1e6;
+
+  /* Type */
+  --display: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+  --sans: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Scale */
+  --container: 1180px;
+  --gutter: 28px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-pill: 100px;
+
+  /* Motion */
+  --ease: cubic-bezier(.2, .7, .3, 1);
+
+  /* Elevation */
+  --shadow-lift: 0 28px 60px -24px rgba(7, 59, 94, 0.4);
+  --shadow-card: 0 18px 38px -22px rgba(7, 59, 94, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Node
+node_modules/
+
+# Heavy source assets — never push to GitHub
+apple-products-raw/
+_source-for-tracing/
+gatort5_wp389.sql
+
+# Large binary uploads / extracts
+*.zip
+*.tar
+*.tar.gz
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log

@@ -1,0 +1,50 @@
+# WordPress page slugs → new locations
+/accessibility-statement       /legal/accessibility.html      301
+/apple-parts-list              /business/apple-parts-list/    301
+/business                      /business/                     301
+/consumer                      /consumer/                     301
+/contact                       /contact/                      301
+/faq                           /business/faq/                 301
+/products                      /products/                     301
+/service                       /service/                      301
+/terms-conditions              /legal/terms.html              301
+
+# Product slug shortcuts
+/imac                          /products/desktops/imac/                  301
+/mac-mini                      /products/desktops/mac-mini/              301
+/mac-studio                    /products/desktops/mac-studio/            301
+/macbook-air                   /products/notebooks/macbook-air/          301
+/macbook-pro                   /products/notebooks/macbook-pro/          301
+/ipad                          /products/ipads/                          301
+
+# WordPress query-string permalinks (?page_id=N) — Cloudflare Pages supports query-string matching
+/* page_id=200       /service/                                301
+/* page_id=228       /contact/                                301
+/* page_id=306       /business/                               301
+/* page_id=427       /consumer/                               301
+/* page_id=759       /business/contact/                       301
+/* page_id=136       /products/                               301
+/* page_id=1059      /contact/                                301
+/* page_id=1071      /business/faq/                           301
+/* page_id=1078      /legal/terms.html                        301
+/* page_id=1092      /business/apple-parts-list/              301
+/* page_id=1098      /products/notebooks/macbook-air/         301
+/* page_id=1099      /products/notebooks/macbook-pro/         301
+/* page_id=1100      /products/desktops/imac/                 301
+/* page_id=1102      /products/desktops/mac-mini/             301
+/* page_id=1103      /products/desktops/mac-studio/           301
+/* page_id=1118      /products/ipads/                         301
+/* page_id=1235      /products/                               301
+/* page_id=1253      /service/                                301
+/* page_id=1334      /business/faq/                           301
+/* page_id=1336      /legal/terms.html                        301
+/* page_id=1674      /legal/accessibility.html                301
+
+# Old WordPress feed URLs (occasionally crawled)
+/feed                /sitemap.xml                             301
+/feed/*              /sitemap.xml                             301
+/wp-content/*        /                                        410
+/wp-admin/*          /                                        410
+/wp-login.php        /                                        410
+
+# Catch-all (must be last) — Cloudflare Pages handles 404 automatically

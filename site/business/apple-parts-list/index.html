@@ -47,13 +47,18 @@
     .topbar-actions { width: 100%; flex-wrap: wrap; }
   }
 
-  .stockbar { background: #fff; padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 13px; flex-shrink: 0; z-index: 25; }
-  .markup-control { display: flex; gap: 6px; align-items: center; font-size: 13px; }
-  .markup-control label { font-weight: 600; color: var(--ink); }
-  .markup-control input { width: 70px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; font-size: 13px; }
-  .markup-control input.active { border-color: var(--blue); background: rgba(1,113,185,.06); font-weight: 600; }
-  .markup-control input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(1,113,185,.15); }
-  .markup-control .markup-suffix { color: var(--slate); font-size: 12px; }
+  .stockbar { background: #fff; padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 18px; align-items: center; flex-wrap: wrap; font-size: 13px; flex-shrink: 0; z-index: 25; }
+  .price-modes { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .price-modes .mode-group { display: flex; gap: 5px; align-items: center; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; transition: border-color .15s, background .15s; }
+  .price-modes .mode-group.active { border-color: var(--blue); background: rgba(1,113,185,.06); }
+  .price-modes input[type="radio"] { accent-color: var(--blue); margin: 0; }
+  .price-modes input[type="number"] { width: 56px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-family: inherit; font-size: 13px; }
+  .price-modes input[type="number"]:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(1,113,185,.15); }
+  .price-modes label { font-weight: 600; color: var(--ink); cursor: pointer; user-select: none; }
+  .price-modes .suffix { color: var(--slate); font-size: 12px; }
+  .price-modes .sep { width: 1px; height: 22px; background: var(--line); }
+  .price-modes .ac-group { display: flex; gap: 5px; align-items: center; padding: 4px 8px; }
+  .price-modes .ac-group label { color: var(--slate); font-weight: 500; }
   .stockbar label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
   .stockbar input { accent-color: var(--blue); }
   .stockbar .count { margin-left: auto; color: var(--slate); font-size: 12px; }
@@ -197,10 +202,31 @@
 
 <div class="stockbar">
   <label><input type="checkbox" id="stocked-only"> In stock only</label>
-  <div class="markup-control">
-    <label for="markup-input">Customer markup</label>
-    <input type="number" id="markup-input" placeholder="1" min="0" max="50" step="0.1" inputmode="decimal" title="Override the default markup % on Customer Price (default: 1% over Dealer B + $0.95). AppleCare and MacBook Neo are unaffected.">
-    <span class="markup-suffix">%</span>
+  <div class="price-modes" role="group" aria-label="Customer pricing method">
+    <div class="mode-group" data-mode="default">
+      <input type="radio" id="mode-default" name="price-mode" value="default" checked>
+      <label for="mode-default">Default</label>
+    </div>
+    <div class="mode-group" data-mode="msrp">
+      <input type="radio" id="mode-msrp" name="price-mode" value="msrp">
+      <label for="mode-msrp">MSRP −</label>
+      <input type="number" id="msrp-pct" placeholder="10" min="0" max="100" step="0.1" inputmode="decimal" aria-label="Percent off MSRP">
+      <span class="suffix">%</span>
+    </div>
+    <div class="mode-group" data-mode="dealer">
+      <input type="radio" id="mode-dealer" name="price-mode" value="dealer">
+      <label for="mode-dealer">Dealer B +&nbsp;$</label>
+      <input type="number" id="dealer-add" placeholder="0.95" min="0" step="0.01" inputmode="decimal" aria-label="Dollars added to Dealer B">
+      <span class="suffix">×</span>
+      <input type="number" id="dealer-pct" placeholder="1" min="0" max="100" step="0.1" inputmode="decimal" aria-label="Percent markup">
+      <span class="suffix">%</span>
+    </div>
+    <span class="sep" aria-hidden="true"></span>
+    <div class="ac-group" title="Discount applied to AppleCare+ products only (always % off GatorTec MSRP).">
+      <label for="ac-pct">AppleCare+ −</label>
+      <input type="number" id="ac-pct" placeholder="15" min="0" max="100" step="0.1" inputmode="decimal" aria-label="AppleCare+ percent off MSRP">
+      <span class="suffix">%</span>
+    </div>
   </div>
   <span class="count"><strong id="result-count">0</strong> of <span id="total-count">0</span> SKUs</span>
 </div>
@@ -269,7 +295,11 @@
     colFilters: {},   // {Family: 'MacBook Air'}
     search: '',
     stockedOnly: false,
-    customMarkup: null,  // number (percent) or null for default rules
+    priceMode: 'default',     // 'default' | 'msrp' | 'dealer'
+    msrpPct: null,            // % off GatorTec MSRP (mode=msrp)
+    dealerAdd: null,          // $ added to Dealer B (mode=dealer, defaults to 0.95)
+    dealerPct: null,          // % markup over (DealerB + add) (mode=dealer)
+    acPct: null,              // % off MSRP for AppleCare+ items (always applies; defaults to 15)
     sortKey: 'Family',  // default sort
     sortDir: 'asc',     // 'asc' | 'desc'
   };
@@ -287,15 +317,26 @@
     const d = Number(item.DealerB) || 0;
     const msrp = gatorMSRP(item) || 0;
     const fam = (item.Family || '').toLowerCase();
-    // Special cases — independent of custom markup
-    if (fam.includes('applecare')) return Math.round(msrp * 0.85 * 100) / 100;
-    if (fam === 'macbook neo') return d;
-    // Custom markup overrides default when staff has entered a value
-    if (state.customMarkup != null) {
-      return Math.round((d + 0.95) * (1 + state.customMarkup / 100) * 100) / 100;
+    const round2 = n => Math.round(n * 100) / 100;
+
+    // AppleCare+ always uses its own % off MSRP (default 15)
+    if (fam.includes('applecare')) {
+      const pct = state.acPct != null ? state.acPct : 15;
+      return round2(msrp * (1 - pct / 100));
     }
-    // Default rule for everything that isn't AppleCare+ or MacBook Neo
-    return Math.round((d + 0.95) * 1.01 * 100) / 100;
+    // MacBook Neo always passes through Dealer B
+    if (fam === 'macbook neo') return d;
+
+    // Everything else follows the active pricing mode
+    if (state.priceMode === 'msrp' && state.msrpPct != null) {
+      return round2(msrp * (1 - state.msrpPct / 100));
+    }
+    if (state.priceMode === 'dealer' && state.dealerPct != null) {
+      const add = state.dealerAdd != null ? state.dealerAdd : 0.95;
+      return round2((d + add) * (1 + state.dealerPct / 100));
+    }
+    // Default rule
+    return round2((d + 0.95) * 1.01);
   }
 
   function money(n) {
@@ -649,12 +690,57 @@
     state.stockedOnly = e.target.checked;
     render();
   });
-  document.getElementById('markup-input').addEventListener('input', e => {
-    const v = parseFloat(e.target.value);
-    state.customMarkup = isNaN(v) ? null : v;
-    e.target.classList.toggle('active', state.customMarkup != null);
+  // ---- Pricing-mode panel ----
+  function refreshModeUI() {
+    document.querySelectorAll('.price-modes .mode-group').forEach(g => {
+      g.classList.toggle('active', g.dataset.mode === state.priceMode);
+    });
+  }
+  function parseNum(el) {
+    const v = parseFloat(el.value);
+    return isNaN(v) ? null : v;
+  }
+  // Radio changes set the active mode
+  document.querySelectorAll('input[name="price-mode"]').forEach(r => {
+    r.addEventListener('change', e => {
+      state.priceMode = e.target.value;
+      refreshModeUI();
+      renderBody();
+    });
+  });
+  // Typing in any mode's input auto-activates that mode and recalculates
+  document.getElementById('msrp-pct').addEventListener('input', e => {
+    state.msrpPct = parseNum(e.target);
+    if (state.msrpPct != null) {
+      state.priceMode = 'msrp';
+      document.getElementById('mode-msrp').checked = true;
+      refreshModeUI();
+    }
     renderBody();
   });
+  document.getElementById('dealer-add').addEventListener('input', e => {
+    state.dealerAdd = parseNum(e.target);
+    if (state.dealerAdd != null || state.dealerPct != null) {
+      state.priceMode = 'dealer';
+      document.getElementById('mode-dealer').checked = true;
+      refreshModeUI();
+    }
+    renderBody();
+  });
+  document.getElementById('dealer-pct').addEventListener('input', e => {
+    state.dealerPct = parseNum(e.target);
+    if (state.dealerPct != null || state.dealerAdd != null) {
+      state.priceMode = 'dealer';
+      document.getElementById('mode-dealer').checked = true;
+      refreshModeUI();
+    }
+    renderBody();
+  });
+  document.getElementById('ac-pct').addEventListener('input', e => {
+    state.acPct = parseNum(e.target);
+    renderBody();
+  });
+  refreshModeUI();
   document.getElementById('reset').addEventListener('click', () => {
     state.colFilters = {};
     state.search = '';

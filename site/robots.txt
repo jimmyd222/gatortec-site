@@ -1,11 +1,12 @@
 User-agent: *
 Allow: /
 
-# Staff-only — do not index
+# Internal / non-marketing assets — public URLs but kept out of search results
 Disallow: /business/apple-parts-list/
+Disallow: /docs/
+Disallow: /images/
+Disallow: /newsletters/
 Disallow: /staff/
-
-# Twilio voice prompts — public for IVR fetch, no value to search engines
 Disallow: /twilio-phone-recordings-2025/
 
 Sitemap: https://gatortec.com/sitemap.xml

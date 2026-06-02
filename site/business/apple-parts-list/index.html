@@ -275,11 +275,20 @@
   };
 
   // ============ HELPERS ============
+  // GatorTec MSRP = Apple MSRP + $0.95 (our .95 ending convention).
+  // Used everywhere customer-facing — never displays the raw whole-dollar Apple value.
+  function gatorMSRP(item) {
+    const m = Number(item.MSRP);
+    if (!Number.isFinite(m) || m <= 0) return null;
+    return Math.round((m + 0.95) * 100) / 100;
+  }
+
   function customerPrice(item) {
     const d = Number(item.DealerB) || 0;
+    const msrp = gatorMSRP(item) || 0;
     const fam = (item.Family || '').toLowerCase();
     // Special cases — independent of custom markup
-    if (fam.includes('applecare')) return Math.round((Number(item.MSRP) || 0) * 0.85 * 100) / 100;
+    if (fam.includes('applecare')) return Math.round(msrp * 0.85 * 100) / 100;
     if (fam === 'macbook neo') return d;
     // Custom markup overrides default rules when staff has entered a value
     if (state.customMarkup != null) {
@@ -301,6 +310,7 @@
 
   function getValue(item, col) {
     if (col.key === '__customer') return customerPrice(item);
+    if (col.key === 'MSRP') return gatorMSRP(item);
     return item[col.key];
   }
 
@@ -535,16 +545,17 @@
     document.getElementById('d-desc').textContent = item.Description || '';
 
     const cust = customerPrice(item);
-    setDrawerPrice('d-msrp', 'MSRP', item.MSRP);
+    const msrpGT = gatorMSRP(item);
+    setDrawerPrice('d-msrp', 'MSRP', msrpGT);
     setDrawerPrice('d-dealer', 'Dealer B', item.DealerB);
     setDrawerPrice('d-cust', 'Customer', cust);
 
     // Email blocks
     const blocks = [
       { label: 'Email — Customer price', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(cust)}` },
-      { label: 'Email — MSRP', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(item.MSRP)}` },
+      { label: 'Email — MSRP', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(msrpGT)}` },
       { label: 'Email — Dealer B', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(item.DealerB)}` },
-      { label: 'One-line summary', text: `${item.SKU} — ${item.Description} — ${money(item.MSRP)}` },
+      { label: 'One-line summary', text: `${item.SKU} — ${item.Description} — ${money(msrpGT)}` },
     ];
     document.getElementById('d-emails').innerHTML = blocks.map((b, i) => `
       <button type="button" class="email-btn" data-block="${i}">

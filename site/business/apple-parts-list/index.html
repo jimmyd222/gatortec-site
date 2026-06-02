@@ -99,7 +99,6 @@
   tbody td.price-dealer { color: #7a8a93; }
   tbody td.stock-cell { text-align: center; }
   tbody td.stock-yes { color: #0a7140; font-weight: 600; }
-  tbody td.stock-available { color: #5b6671; font-weight: 600; cursor: help; }
   tbody td.stock-no { color: #a52424; }
 
   tbody td.actions { text-align: right; padding: 4px 8px; }
@@ -197,7 +196,7 @@
 </div>
 
 <div class="stockbar">
-  <label><input type="checkbox" id="stocked-only"> Stocked items only</label>
+  <label><input type="checkbox" id="stocked-only"> In stock only</label>
   <div class="markup-control">
     <label for="markup-input">Customer markup</label>
     <input type="number" id="markup-input" placeholder="1" min="0" max="50" step="0.1" inputmode="decimal" title="Override the default markup % on Customer Price (default: 1% for Macs/iPads, 5% for accessories). AppleCare and MacBook Neo are unaffected.">
@@ -485,11 +484,8 @@
       case 'stock': {
         const n = Number(item.Inventory);
         const has = Number.isFinite(n) && n > 0;
-        const onList = (item.Stocked || '').toLowerCase() === 'yes';
         if (!has) return `<td class="stock-cell stock-no">—</td>`;
-        const cls = onList ? 'stock-yes' : 'stock-available';
-        const title = onList ? '' : ' title="Available at a distributor — not on our standard stocking list"';
-        return `<td class="stock-cell ${cls}"${title}>${escapeHtml(n)}</td>`;
+        return `<td class="stock-cell stock-yes">${escapeHtml(n)}</td>`;
       }
       case 'action':
         return `<td class="actions"><button type="button" class="open-drawer"${dataAttr}>View</button></td>`;
@@ -567,9 +563,7 @@
     const tdsQty = item.TDS_Inventory;
     const imQty = item.INGRAM_Inventory;
     const haveBreakdown = (tdsQty != null) || (imQty != null);
-    const totalLabel = item.Inventory != null
-      ? item.Inventory + ((item.Stocked || '').toLowerCase() === 'yes' ? '' : ' (not on our standard stocking list)')
-      : '—';
+    const totalLabel = item.Inventory != null ? String(item.Inventory) : '—';
     const tdsLabel = tdsQty != null
       ? (tdsQty + (item.TDS_SKU ? ' · ' + item.TDS_SKU : ''))
       : (item.TDS_SKU || '—');

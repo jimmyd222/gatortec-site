@@ -8,5 +8,6 @@ Disallow: /images/
 Disallow: /newsletters/
 Disallow: /staff/
 Disallow: /twilio-phone-recordings-2025/
+Disallow: /twilio-phone-recordings-2026/
 
 Sitemap: https://gatortec.com/sitemap.xml

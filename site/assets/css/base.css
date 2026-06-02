@@ -756,6 +756,7 @@ footer .col h2, footer .col h3 {
   text-transform: uppercase; margin-bottom: 14px; font-weight: 700;
 }
 footer .col a { display: block; color: #aebccb; margin-bottom: 9px; transition: color .2s; }
+footer .col a .staff-tag { font-size: 11px; opacity: .7; margin-left: 4px; font-weight: 400; }
 footer .col a:hover { color: #fff; }
 footer .sig-row {
   display: flex; align-items: center; gap: 16px; margin-top: 22px;

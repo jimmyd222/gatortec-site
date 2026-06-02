@@ -65,6 +65,7 @@ function footer(depth) {
 <a href="${up}legal/privacy.html">Privacy</a>
 <a href="${up}legal/terms.html">Terms</a>
 <a href="${up}legal/sms-terms.html">SMS Terms</a>
+<a href="/business/apple-parts-list/">Parts List <span class="staff-tag">(staff)</span></a>
 </nav>
 </div>
 <div class="legal"><span>© 2010–2026 GatorTec, LLC. All rights reserved.</span><span>Gainesville, FL · <a href="tel:+13525057582">352.505.7582</a></span></div>

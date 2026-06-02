@@ -563,7 +563,7 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
   margin-right: 4px;
 }
 .pdp-hero .price .price-note {
-  font-size: 13px; color: var(--slate-soft);
+  font-size: 13px; color: var(--slate);
   margin-left: 8px;
 }
 .pdp-hero .swatches {
@@ -660,10 +660,10 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
 .dcta.biz:hover { border-color: rgba(255, 255, 255, 0.3); }
 .dcta .dlabel {
   font-size: 12px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; opacity: .8;
+  text-transform: uppercase;
 }
-.dcta.biz .dlabel { color: #9ed0ee; }
-.dcta.home .dlabel { color: var(--blue); }
+.dcta.biz .dlabel { color: #c9e3f5; }
+.dcta.home .dlabel { color: var(--blue-ink); }
 .dcta h3 {
   font-family: var(--display); font-weight: 600; font-size: 22px;
   letter-spacing: -.01em; line-height: 1.2; margin: 4px 0 6px;
@@ -881,7 +881,7 @@ footer .apple-legal p:last-child { margin-bottom: 0; }
   text-decoration: none; color: inherit;
 }
 .contact-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-.contact-card .ck { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+.contact-card .ck { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-ink); margin-bottom: 14px; }
 .contact-card h3 { font-family: var(--display); font-weight: 700; font-size: 22px; margin: 0 0 10px; line-height: 1.2; color: var(--ink); }
 .contact-card p { font-size: 14.5px; color: var(--slate); line-height: 1.55; margin: 0 0 18px; flex-grow: 1; }
 .contact-card .phone {

@@ -179,10 +179,10 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
 .card.home { background: var(--white); color: var(--ink); }
 .card .klabel {
   font-size: 13px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; opacity: .85;
+  text-transform: uppercase;
 }
-.card.biz .klabel { color: #9ed0ee; }
-.card.home .klabel { color: var(--blue); }
+.card.biz .klabel { color: #c9e3f5; }
+.card.home .klabel { color: var(--blue-ink); }
 .card h2 {
   font-family: var(--display); font-weight: 600; font-size: 34px;
   letter-spacing: -.02em; margin: 14px 0 12px; line-height: 1.1;
@@ -449,10 +449,10 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
   background: radial-gradient(60% 50% at 88% -5%, var(--blue-tint), transparent 70%);
 }
 .cat-hero .wrap { position: relative; }
-.crumbs { font-size: 13.5px; color: var(--slate); margin-bottom: 18px; }
-.crumbs a { color: var(--slate); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
-.crumbs a:hover { border-bottom-color: var(--slate); color: var(--ink); }
-.crumbs .sep { margin: 0 8px; color: var(--slate-soft); }
+.crumbs { font-size: 13.5px; color: var(--ink); margin-bottom: 18px; }
+.crumbs a { color: var(--blue-ink); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; font-weight: 500; }
+.crumbs a:hover { border-bottom-color: var(--blue-ink); color: var(--blue); }
+.crumbs .sep { margin: 0 8px; color: var(--slate); }
 .crumbs .current { color: var(--ink); font-weight: 600; }
 .cat-hero h1 {
   font-family: var(--display); font-weight: 800;
@@ -937,4 +937,22 @@ footer .apple-legal p:last-child { margin-bottom: 0; }
 @media (max-width: 540px) {
   #gt-consent .gt-consent-actions { width: 100%; }
   #gt-consent .gt-consent-actions button { flex: 1; }
+}
+
+/* ===== Scroll-to-top button (long pages only, injected by nav.js) ===== */
+.to-top {
+  position: fixed; right: 20px; bottom: 20px; z-index: 90;
+  width: 44px; height: 44px; border-radius: 999px;
+  background: var(--blue); color: var(--white); border: 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity .18s, transform .18s, background-color .15s;
+}
+.to-top:hover { background: var(--blue-deep); }
+.to-top:focus-visible { outline: 3px solid var(--blue-tint); outline-offset: 2px; }
+.to-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: none; }
+  .to-top.show { transform: none; }
 }

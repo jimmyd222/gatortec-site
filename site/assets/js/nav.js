@@ -43,3 +43,22 @@
     if (e.key === 'Escape' && nav.classList.contains('open')) close();
   });
 })();
+
+// Scroll-to-top button — auto-appears on long pages
+(function () {
+  if (document.documentElement.scrollHeight < 2200) return;
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'to-top';
+  b.setAttribute('aria-label', 'Scroll to top');
+  b.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>';
+  b.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.body.appendChild(b);
+  function toggle() {
+    if (window.scrollY > 600) b.classList.add('show'); else b.classList.remove('show');
+  }
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+})();

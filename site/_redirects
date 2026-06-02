@@ -17,28 +17,8 @@
 /macbook-pro                   /products/notebooks/macbook-pro/          301
 /ipad                          /products/ipads/                          301
 
-# WordPress query-string permalinks (?page_id=N) — Cloudflare Pages supports query-string matching
-/* page_id=200       /service/                                301
-/* page_id=228       /contact/                                301
-/* page_id=306       /business/                               301
-/* page_id=427       /consumer/                               301
-/* page_id=759       /business/contact/                       301
-/* page_id=136       /products/                               301
-/* page_id=1059      /contact/                                301
-/* page_id=1071      /business/faq/                           301
-/* page_id=1078      /legal/terms.html                        301
-/* page_id=1092      /business/apple-parts-list/              301
-/* page_id=1098      /products/notebooks/macbook-air/         301
-/* page_id=1099      /products/notebooks/macbook-pro/         301
-/* page_id=1100      /products/desktops/imac/                 301
-/* page_id=1102      /products/desktops/mac-mini/             301
-/* page_id=1103      /products/desktops/mac-studio/           301
-/* page_id=1118      /products/ipads/                         301
-/* page_id=1235      /products/                               301
-/* page_id=1253      /service/                                301
-/* page_id=1334      /business/faq/                           301
-/* page_id=1336      /legal/terms.html                        301
-/* page_id=1674      /legal/accessibility.html                301
+# WordPress ?page_id=N permalinks are handled client-side by a small shim in /index.html
+# (Cloudflare Pages _redirects does not match on query strings.)
 
 # Old WordPress feed URLs (occasionally crawled)
 /feed                /sitemap.xml                             301

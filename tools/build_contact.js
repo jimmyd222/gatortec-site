@@ -157,7 +157,7 @@ ${header(depth)}
 <input type="hidden" name="_subject" value="GatorTec B2B Quote Request">
 <input type="hidden" name="_next" value="https://gatortec.com/contact/thanks.html">
 <input type="hidden" name="form_source" value="business-contact">
-<input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+<input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank">
 
 <div class="field-row">
 <div class="field">
@@ -267,7 +267,7 @@ ${header(depth)}
 <input type="hidden" name="_subject" value="GatorTec Consumer Contact">
 <input type="hidden" name="_next" value="https://gatortec.com/contact/thanks.html">
 <input type="hidden" name="form_source" value="consumer-contact">
-<input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+<input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank">
 
 <div class="field-row">
 <div class="field">

@@ -27,8 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=2">
-<link rel="stylesheet" href="../assets/css/base.css?v=2">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=3">
+<link rel="stylesheet" href="../assets/css/base.css?v=3">
 <style>
   .svc-jump { display:flex; flex-wrap:wrap; gap:10px; margin:32px 0 8px; }
   .svc-jump a {
@@ -78,8 +78,9 @@
     background:var(--white); border:1px solid var(--line); border-radius:12px;
     padding:24px;
   }
-  .svc-callout h3 { font-family:var(--display); font-weight:600; font-size:18px; margin:0 0 8px; line-height:1.25; }
+  .svc-callout h2, .svc-callout h3 { font-family:var(--display); font-weight:600; font-size:18px; margin:0 0 8px; line-height:1.25; }
   .svc-callout p { font-size:14.5px; color:var(--slate); line-height:1.55; margin:0; }
+  .ptable > caption.ptable-caption { font-family:var(--display); font-weight:600; font-size:18px; color:var(--ink); margin:24px 0 12px; text-align:left; caption-side:top; padding:18px 24px 0; }
 </style>
 </head><body>
 
@@ -120,15 +121,15 @@
 <section class="section"><div class="wrap">
 <div class="svc-callouts">
 <div class="svc-callout">
-<h3>1. Schedule a drop-off</h3>
+<h2>1. Schedule a drop-off</h2>
 <p>Service is by appointment only — call or message us, and we'll schedule a time. Drop off at our Gainesville location, or ship from out of town. We diagnose, quote, and confirm before any work starts.</p>
 </div>
 <div class="svc-callout">
-<h3>2. Genuine Apple parts</h3>
+<h2>2. Genuine Apple parts</h2>
 <p>As an AASP, we use only genuine Apple parts. Your repair is performed by Apple-certified technicians using Apple-approved processes and diagnostics.</p>
 </div>
 <div class="svc-callout">
-<h3>3. Real warranty</h3>
+<h2>3. Real warranty</h2>
 <p>Apple-honored repairs come with a 90-day labor and parts warranty. We're here if anything comes up after you pick up.</p>
 </div>
 </div>
@@ -139,8 +140,8 @@
 <h2 id="mac-h">Mac.</h2>
 <p class="lede">In-warranty Mac repairs are free. AppleCare+ covers accidental damage at fixed fees. Out-of-warranty repairs include a diagnostic fee that's applied to repair labor if you choose to proceed.</p>
 
-<p class="ptable-caption">Mac service pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">Mac service pricing</caption>
 <thead><tr><th>Repair type</th><th>Price</th></tr></thead>
 <tbody>
 <tr><td>In-warranty repair*</td><td>Free</td></tr>
@@ -350,8 +351,8 @@
 <summary>iPhone 11, X-series, SE, and 8 &amp; earlier</summary>
 <div class="svc-acc-body">
 
-<p class="ptable-caption">iPhone 11 Service Pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">iPhone 11 Service Pricing</caption>
 <thead><tr><th>Repair type</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Labor/Shop fee</td><td>$0</td><td>$35</td></tr>
@@ -365,8 +366,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">iPhone X / XS / XR Service Pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">iPhone X / XS / XR Service Pricing</caption>
 <thead><tr><th>Repair type</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Labor/Shop fee</td><td>$0</td><td>$35</td></tr>
@@ -382,8 +383,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">iPhone SE Service Pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">iPhone SE Service Pricing</caption>
 <thead><tr><th>Repair type</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Labor/Shop fee</td><td>$0</td><td>$35</td></tr>
@@ -397,8 +398,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">iPhone 8 &amp; earlier Service Pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">iPhone 8 &amp; earlier Service Pricing</caption>
 <thead><tr><th>Repair type</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Labor/Shop fee</td><td>$0</td><td>$35</td></tr>
@@ -606,8 +607,8 @@
 <summary>Apple Watch Series 9, 8, 7</summary>
 <div class="svc-acc-body">
 
-<p class="ptable-caption">Apple Watch Series 9</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 9</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 9 (GPS) Aluminum / Nike</td><td>$69</td><td>$319</td></tr>
@@ -616,8 +617,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">Apple Watch Series 8</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 8</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 8 (GPS) Aluminum / Nike</td><td>$69</td><td>$319</td></tr>
@@ -626,8 +627,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">Apple Watch Series 7</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 7</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 7 (GPS) Aluminum / Nike</td><td>$69</td><td>$319</td></tr>
@@ -644,8 +645,8 @@
 <summary>Apple Watch Series 6, 5, 4</summary>
 <div class="svc-acc-body">
 
-<p class="ptable-caption">Apple Watch Series 6</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 6</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 6 (GPS) Aluminum / Nike</td><td>$69</td><td>$319</td></tr>
@@ -655,8 +656,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">Apple Watch Series 5</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 5</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 5 (GPS) Aluminum / Nike</td><td>$69</td><td>$319</td></tr>
@@ -667,8 +668,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">Apple Watch Series 4</p>
 <table class="ptable">
+<caption class="ptable-caption">Apple Watch Series 4</caption>
 <thead><tr><th>Device</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Series 4 (GPS) / Nike+ (GPS)</td><td>$69</td><td>$319</td></tr>
@@ -687,8 +688,8 @@
 <h2 id="audio-h">AirPods, Beats &amp; Audio.</h2>
 <p class="lede">Battery service, charging case replacement, and accidental damage coverage for AirPods. Beats coverage in-warranty.</p>
 
-<p class="ptable-caption">AirPods service pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">AirPods service pricing</caption>
 <thead><tr><th>Item</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>AirPods</td><td>$29</td><td>$79</td></tr>
@@ -703,8 +704,8 @@
 </tbody>
 </table>
 
-<p class="ptable-caption">Beats service pricing</p>
 <table class="ptable">
+<caption class="ptable-caption">Beats service pricing</caption>
 <thead><tr><th>Item</th><th>with AppleCare+</th><th>without AppleCare+</th></tr></thead>
 <tbody>
 <tr><td>Beats Studio</td><td>Free</td><td>Varies by model</td></tr>
@@ -791,21 +792,21 @@
 <div class="intro">
 <a class="brand" href="../"><img src="../assets/img/site/gatortec-mark.png" alt="" aria-hidden="true"><span>GatorTec</span></a>
 <p>North Florida's Apple Premier Partner. Locally owned, Apple-certified, and here since 2010 — helping businesses and individuals choose, source, and own the right Apple devices. Also an Apple Authorized Service Provider.</p>
-<div class="sig-row" aria-label="Apple Premier Partner"><img src="../assets/signatures/premier-partner-2ln.png" alt="Apple Premier Partner"></div>
+<div class="sig-row" aria-label="Apple Premier Partner"><img src="../assets/signatures/premier-partner-2ln.png" alt=""></div>
 </div>
-<nav class="col" aria-label="For Business"><h3>For Business</h3>
+<nav class="col" aria-label="For Business"><h2>For Business</h2>
 <a href="../business/">Overview</a>
 <a href="../products/">Products</a>
 <a href="../service/">Service</a>
 <a href="../business/contact/">Request a quote</a>
 </nav>
-<nav class="col" aria-label="For Home"><h3>For Home</h3>
+<nav class="col" aria-label="For Home"><h2>For Home</h2>
 <a href="../consumer/">Overview</a>
 <a href="../products/">Products</a>
 <a href="../service/">Service</a>
 <a href="../consumer/contact/">Contact us</a>
 </nav>
-<nav class="col" aria-label="Company"><h3>Company</h3>
+<nav class="col" aria-label="Company"><h2>Company</h2>
 <a href="../business/faq/">FAQ</a>
 <a href="../legal/accessibility.html">Accessibility</a>
 <a href="../legal/privacy.html">Privacy</a>
@@ -820,6 +821,6 @@
 <p>TM and © 2026 Apple Inc. All rights reserved.</p>
 </div></div></footer>
 
-<script src="../assets/js/nav.js?v=2" defer></script>
-<script src="../assets/js/analytics.js?v=2" defer></script>
+<script src="../assets/js/nav.js?v=3" defer></script>
+<script src="../assets/js/analytics.js?v=3" defer></script>
 </body></html>

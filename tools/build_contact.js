@@ -206,9 +206,7 @@ ${header(depth)}
 </div>
 </div>
 
-<div class="field">
-<label>What are you interested in? <span class="help">Select all that apply</span></label>
-<div class="checkboxes">
+<fieldset class="field field-set"><legend>What are you interested in? <span class="help">Select all that apply</span></legend><div class="checkboxes">
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Mac fleet"> Mac fleet purchase</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="iPad fleet"> iPad fleet purchase</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Accessories"> Accessories (chargers, cables, cases, etc.)</label>
@@ -219,7 +217,7 @@ ${header(depth)}
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Service / repair"> Service &amp; repair</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Other"> Something else</label>
 </div>
-</div>
+</fieldset>
 
 <div class="field">
 <label for="b-message">Tell us a bit more <span class="req">*</span></label>
@@ -285,9 +283,7 @@ ${header(depth)}
 <input type="tel" id="c-phone" name="Phone" autocomplete="tel">
 </div>
 
-<div class="field">
-<label>What are you looking for? <span class="help">Select all that apply</span></label>
-<div class="checkboxes">
+<fieldset class="field field-set"><legend>What are you looking for? <span class="help">Select all that apply</span></legend><div class="checkboxes">
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Mac"> A new Mac</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="iPad"> A new iPad</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Apple Watch"> A new Apple Watch</label>
@@ -299,7 +295,7 @@ ${header(depth)}
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Service"> Service or repair</label>
 <label class="checkbox-item"><input type="checkbox" name="Interests" value="Other"> Something else</label>
 </div>
-</div>
+</fieldset>
 
 <div class="field">
 <label for="c-message">Tell us a bit more <span class="req">*</span></label>

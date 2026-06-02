@@ -148,7 +148,8 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
 }
 @media (max-width: 900px) {
   .chooser .hero-grid { grid-template-columns: 1fr; gap: 32px; align-items: stretch; }
-  .chooser .hero-img img { width: 100%; max-height: 400px; margin-left: 0; }
+  .chooser .hero-img { overflow: hidden; }
+  .chooser .hero-img img { width: 125%; max-width: none; height: auto; margin-left: -12.5%; }
   .chooser .wrap { padding-top: 56px; }
 }
 .chooser h1 {

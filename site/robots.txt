@@ -3,5 +3,9 @@ Allow: /
 
 # Staff-only — do not index
 Disallow: /business/apple-parts-list/
+Disallow: /staff/
+
+# Twilio voice prompts — public for IVR fetch, no value to search engines
+Disallow: /twilio-phone-recordings-2025/
 
 Sitemap: https://gatortec.com/sitemap.xml

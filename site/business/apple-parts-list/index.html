@@ -565,10 +565,10 @@
     const haveBreakdown = (tdsQty != null) || (imQty != null);
     const totalLabel = item.Inventory != null ? String(item.Inventory) : '—';
     const tdsLabel = tdsQty != null
-      ? (tdsQty + (item.TDS_SKU ? ' · ' + item.TDS_SKU : ''))
+      ? (tdsQty + (item.TDS_SKU ? ' | ' + item.TDS_SKU : ''))
       : (item.TDS_SKU || '—');
     const imLabel = imQty != null
-      ? (imQty + (item.INGRAM_SKU ? ' · ' + item.INGRAM_SKU : ''))
+      ? (imQty + (item.INGRAM_SKU ? ' | ' + item.INGRAM_SKU : ''))
       : (item.INGRAM_SKU || '—');
     const specFields = [
       ['Family', item.Family], ['Screen', item.ScreenSize], ['Color', item.Color],

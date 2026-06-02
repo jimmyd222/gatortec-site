@@ -199,7 +199,7 @@
   <label><input type="checkbox" id="stocked-only"> In stock only</label>
   <div class="markup-control">
     <label for="markup-input">Customer markup</label>
-    <input type="number" id="markup-input" placeholder="1" min="0" max="50" step="0.1" inputmode="decimal" title="Override the default markup % on Customer Price (default: 1% for Macs/iPads, 5% for accessories). AppleCare and MacBook Neo are unaffected.">
+    <input type="number" id="markup-input" placeholder="1" min="0" max="50" step="0.1" inputmode="decimal" title="Override the default markup % on Customer Price (default: 1% over Dealer B + $0.95). AppleCare and MacBook Neo are unaffected.">
     <span class="markup-suffix">%</span>
   </div>
   <span class="count"><strong id="result-count">0</strong> of <span id="total-count">0</span> SKUs</span>
@@ -290,15 +290,11 @@
     // Special cases — independent of custom markup
     if (fam.includes('applecare')) return Math.round(msrp * 0.85 * 100) / 100;
     if (fam === 'macbook neo') return d;
-    // Custom markup overrides default rules when staff has entered a value
+    // Custom markup overrides default when staff has entered a value
     if (state.customMarkup != null) {
       return Math.round((d + 0.95) * (1 + state.customMarkup / 100) * 100) / 100;
     }
-    // Default rules
-    if (fam.includes('accessor') || fam.includes('cable') || fam.includes('adapter') || fam.includes('charger') ||
-        fam.includes('keyboard') || fam.includes('mouse') || fam.includes('trackpad') || fam.includes('pencil')) {
-      return Math.round((d + 0.95) * 1.05 * 100) / 100;
-    }
+    // Default rule for everything that isn't AppleCare+ or MacBook Neo
     return Math.round((d + 0.95) * 1.01 * 100) / 100;
   }
 

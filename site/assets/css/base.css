@@ -148,7 +148,7 @@ nav.main a:hover, nav.main a[aria-current="page"] { color: var(--blue); }
 }
 @media (max-width: 900px) {
   .chooser .hero-grid { grid-template-columns: 1fr; gap: 32px; align-items: stretch; }
-  .chooser .hero-img img { width: 100%; max-height: 280px; margin-left: 0; }
+  .chooser .hero-img img { width: 100%; max-height: 400px; margin-left: 0; }
   .chooser .wrap { padding-top: 56px; }
 }
 .chooser h1 {
@@ -741,6 +741,10 @@ footer .grid {
   display: flex; justify-content: space-between; gap: 40px;
   flex-wrap: wrap; padding-bottom: 34px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+@media (max-width: 760px) {
+  footer .grid { justify-content: flex-start; gap: 28px; }
+  footer .intro, footer .col { flex: 1 1 100%; }
 }
 footer .brand { color: #fff; font-size: 21px; font-weight: 800; }
 footer .brand img { width: 38px; height: 38px; filter: invert(1) brightness(1.1); }

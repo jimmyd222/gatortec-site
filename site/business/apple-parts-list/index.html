@@ -370,7 +370,7 @@
   // assuming all OTHER filters apply. (Standard Excel autofilter behavior.)
   function filteredItems(skipColKey) {
     return state.items.filter(it => {
-      if (state.stockedOnly && (it.Stocked || '').toLowerCase() !== 'yes') return false;
+      if (state.stockedOnly && (!it.Inventory || Number(it.Inventory) <= 0)) return false;
 
       if (state.search) {
         const hay = [it.SKU, it.Description, it.Family, it.Color, it.Memory, it.Storage, it.Processor].join(' ').toLowerCase();

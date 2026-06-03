@@ -134,7 +134,7 @@
   .drawer-body h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--slate); margin: 24px 0 10px; }
   .drawer-body h3:first-child { margin-top: 0; }
   .drawer-body .desc { font-size: 15px; color: var(--ink); line-height: 1.5; margin: 0 0 4px; }
-  .drawer-prices { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 6px; max-width: 280px; }
+  .drawer-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; max-width: 420px; }
   .drawer-price {
     background: var(--mist); padding: 12px; border-radius: 10px; text-align: center;
     cursor: pointer; transition: background .15s;
@@ -222,8 +222,9 @@
     <h3>Description</h3>
     <p class="desc" id="d-desc"></p>
 
-    <h3>Price (tap to copy)</h3>
+    <h3>Prices (tap to copy)</h3>
     <div class="drawer-prices">
+      <div class="drawer-price" id="d-msrp"><div class="label">MSRP</div><div class="value">—</div></div>
       <div class="drawer-price" id="d-dealer"><div class="label">Price</div><div class="value">—</div></div>
     </div>
 
@@ -254,6 +255,7 @@
     { key: 'Cellular',    label: 'Cellular',      type: 'text',       filter: 'select' },
     { key: 'Ethernet',    label: 'Ethernet',      type: 'text',       filter: 'select' },
     { key: 'Power',       label: 'Power',         type: 'text',       filter: 'select' },
+        { key: '__msrp',      label: 'MSRP',          type: 'price',      filter: 'none', priceKind: 'msrp' },
         { key: '__price',     label: 'Price',         type: 'price',      filter: 'none', priceKind: 'dealer' },
         { key: 'Inventory',   label: 'Stock',         type: 'stock',      filter: 'none' },
     { key: '__action',    label: '',              type: 'action',     filter: 'none' },
@@ -281,6 +283,13 @@
     return round2(d);
   }
 
+  // GatorTec MSRP = Apple MSRP + $0.95
+  function gatorMSRP(item) {
+    const m = Number(item.MSRP);
+    if (!Number.isFinite(m) || m <= 0) return null;
+    return Math.round((m + 0.95) * 100) / 100;
+  }
+
   function money(n) {
     if (n == null || n === '' || isNaN(Number(n))) return '—';
     const num = Number(n);
@@ -289,6 +298,7 @@
 
   function getValue(item, col) {
     if (col.key === '__price') return techaryPrice(item);
+    if (col.key === '__msrp') return gatorMSRP(item);
     return item[col.key];
   }
 
@@ -522,11 +532,15 @@
     document.getElementById('d-sku').textContent = item.SKU || '—';
     document.getElementById('d-desc').textContent = item.Description || '';
 
-            setDrawerPrice('d-dealer', 'Price', techaryPrice(item));
-        // Email blocks
+    const msrpGT = gatorMSRP(item);
+    setDrawerPrice('d-msrp', 'MSRP', msrpGT);
+    setDrawerPrice('d-dealer', 'Price', techaryPrice(item));
+
+    // Email blocks
     const blocks = [
       { label: 'Email — Price', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(techaryPrice(item))}` },
-      { label: 'One-line summary', text: `${item.SKU} — ${item.Description} — ${money(techaryPrice(item))}` },
+      { label: 'Email — MSRP', text: `${item.Description}\nSKU: ${item.SKU}\nMSRP: ${money(msrpGT)}` },
+      { label: 'One-line summary', text: `${item.SKU} — ${item.Description} — ${money(msrpGT)}` },
     ];
     document.getElementById('d-emails').innerHTML = blocks.map((b, i) => `
       <button type="button" class="email-btn" data-block="${i}">

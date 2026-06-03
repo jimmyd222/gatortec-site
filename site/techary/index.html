@@ -225,7 +225,7 @@
     <h3>Prices (tap to copy)</h3>
     <div class="drawer-prices">
       <div class="drawer-price" id="d-msrp"><div class="label">MSRP</div><div class="value">—</div></div>
-      <div class="drawer-price" id="d-dealer"><div class="label">Price</div><div class="value">—</div></div>
+      <div class="drawer-price" id="d-dealer"><div class="label">Techary Cost</div><div class="value">—</div></div>
     </div>
 
     <h3>Copy email blocks</h3>
@@ -256,7 +256,7 @@
     { key: 'Ethernet',    label: 'Ethernet',      type: 'text',       filter: 'select' },
     { key: 'Power',       label: 'Power',         type: 'text',       filter: 'select' },
         { key: '__msrp',      label: 'MSRP',          type: 'price',      filter: 'none', priceKind: 'msrp' },
-        { key: '__price',     label: 'Price',         type: 'price',      filter: 'none', priceKind: 'dealer' },
+        { key: '__price',     label: 'Techary Cost',  type: 'price',      filter: 'none', priceKind: 'dealer' },
         { key: 'Inventory',   label: 'Stock',         type: 'stock',      filter: 'none' },
     { key: '__action',    label: '',              type: 'action',     filter: 'none' },
   ];
@@ -534,11 +534,11 @@
 
     const msrpGT = gatorMSRP(item);
     setDrawerPrice('d-msrp', 'MSRP', msrpGT);
-    setDrawerPrice('d-dealer', 'Price', techaryPrice(item));
+    setDrawerPrice('d-dealer', 'Techary Cost', techaryPrice(item));
 
     // Email blocks
     const blocks = [
-      { label: 'Email — Price', text: `${item.Description}\nSKU: ${item.SKU}\nPrice: ${money(techaryPrice(item))}` },
+      { label: 'Email — Techary Cost', text: `${item.Description}\nSKU: ${item.SKU}\nCost: ${money(techaryPrice(item))}` },
       { label: 'Email — MSRP', text: `${item.Description}\nSKU: ${item.SKU}\nMSRP: ${money(msrpGT)}` },
       { label: 'One-line summary', text: `${item.SKU} — ${item.Description} — ${money(msrpGT)}` },
     ];

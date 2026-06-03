@@ -286,7 +286,7 @@
   function money(n) {
     if (n == null || n === '' || isNaN(Number(n))) return '—';
     const num = Number(n);
-    return '$' + num.toLocaleString('en-US', { minimumFractionDigits: num % 1 ? 2 : 0, maximumFractionDigits: 2 });
+    return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function getValue(item, col) {
@@ -543,21 +543,15 @@
       });
     });
 
-    // Specs
-    const tdsQty = item.TDS_Inventory;
-    const imQty = item.INGRAM_Inventory;
-    const totalLabel = item.Inventory != null ? String(item.Inventory) : '—';
+    // Specs — Techary view: just combined stock, no distributor breakdown
+    const n = Number(item.Inventory);
+    const stockLabel = Number.isFinite(n) && n > 0 ? String(n) : '—';
     const specFields = [
       ['Family', item.Family], ['Screen', item.ScreenSize], ['Color', item.Color],
       ['Chip', item.Processor], ['Memory', item.Memory], ['Storage', item.Storage],
       ['Power', item.Power], ['Nano-Texture', item.NanoTexture], ['Cellular', item.Cellular],
       ['Ethernet', item.Ethernet], ['Keyboard', item.Keyboard], ['Moveability', item.Moveability],
-      // Distributor stock — qty + SKU on separate rows so each value reads cleanly
-      ['Total stock', totalLabel],
-      ['TDS stock', tdsQty != null ? String(tdsQty) : (item.TDS_SKU ? '0' : null)],
-      ['TDS SKU', item.TDS_SKU],
-      ['Ingram stock', imQty != null ? String(imQty) : (item.INGRAM_SKU ? '0' : null)],
-      ['Ingram SKU', item.INGRAM_SKU],
+      ['Stock', stockLabel],
     ];
     document.getElementById('d-specs').innerHTML = specFields.filter(([_, v]) => v != null && v !== '').map(([k, v]) => `<div class="row"><div class="k">${k}</div><div class="v">${escapeHtml(v)}</div></div>`).join('');
 

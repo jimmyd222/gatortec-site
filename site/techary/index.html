@@ -256,7 +256,7 @@
     { key: 'Cellular',    label: 'Cellular',      type: 'text',       filter: 'select' },
     { key: 'Ethernet',    label: 'Ethernet',      type: 'text',       filter: 'select' },
     { key: 'Power',       label: 'Power',         type: 'text',       filter: 'select' },
-        { key: 'DealerB',     label: 'Price',         type: 'price',      filter: 'none', priceKind: 'dealer' },
+        { key: '__price',     label: 'Price',         type: 'price',      filter: 'none', priceKind: 'dealer' },
         { key: 'Inventory',   label: 'Stock',         type: 'stock',      filter: 'none' },
     { key: '__action',    label: '',              type: 'action',     filter: 'none' },
   ];
@@ -290,7 +290,8 @@
   }
 
   function getValue(item, col) {
-        return item[col.key];
+    if (col.key === '__price') return techaryPrice(item);
+    return item[col.key];
   }
 
   function escapeHtml(s) {

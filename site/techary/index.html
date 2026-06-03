@@ -625,42 +625,6 @@
     state.stockedOnly = e.target.checked;
     render();
   });
-      renderBody();
-    });
-  });
-  // Typing in any mode's input auto-activates that mode and recalculates
-  document.getElementById('msrp-pct').addEventListener('input', e => {
-    state.msrpPct = parseNum(e.target);
-    if (state.msrpPct != null) {
-      state.priceMode = 'msrp';
-      document.getElementById('mode-msrp').checked = true;
-      refreshModeUI();
-    }
-    renderBody();
-  });
-  document.getElementById('dealer-add').addEventListener('input', e => {
-    state.dealerAdd = parseNum(e.target);
-    if (state.dealerAdd != null || state.dealerPct != null) {
-      state.priceMode = 'dealer';
-      document.getElementById('mode-dealer').checked = true;
-      refreshModeUI();
-    }
-    renderBody();
-  });
-  document.getElementById('dealer-pct').addEventListener('input', e => {
-    state.dealerPct = parseNum(e.target);
-    if (state.dealerPct != null || state.dealerAdd != null) {
-      state.priceMode = 'dealer';
-      document.getElementById('mode-dealer').checked = true;
-      refreshModeUI();
-    }
-    renderBody();
-  });
-  document.getElementById('ac-pct').addEventListener('input', e => {
-    state.acPct = parseNum(e.target);
-    renderBody();
-  });
-  refreshModeUI();
   document.getElementById('reset').addEventListener('click', () => {
     state.colFilters = {};
     state.search = '';

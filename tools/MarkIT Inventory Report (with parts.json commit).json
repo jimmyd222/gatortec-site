@@ -272,7 +272,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build the parts.json payload for the staff lookup page.\nconst products = $('Google Sheets (Read)').all();\nconst inventoryMap = $('Code (Prepare Sheet Update)').first().json.inventoryMap || {};\n\nfunction num(v) {\n  if (v == null || v === '') return null;\n  const cleaned = String(v).replace(/[^0-9.\\-]/g, '');\n  const n = parseFloat(cleaned);\n  return Number.isFinite(n) ? n : null;\n}\nfunction str(v) {\n  if (v == null) return null;\n  const s = String(v).trim();\n  return s === '' ? null : s;\n}\n\nconst items = [];\nfor (let i = 0; i < products.length; i++) {\n  const p = products[i].json;\n  const sku = str(p['SKU']);\n  if (!sku) continue;\n\n  const rowIndex = i + 2;\n  const rec = inventoryMap[rowIndex];\n\n  items.push({\n    SKU: sku,\n    Family: str(p['Family']),\n    Description: str(p['Description']),\n    MSRP: num(p['MSRP']),\n    DealerB: num(p['Dealer B']),\n    ScreenSize: str(p['Screen Size']),\n    Color: str(p['Color']),\n    Processor: str(p['Processor']),\n    Memory: str(p['Memory']),\n    Storage: str(p['Storage']),\n    Power: str(p['Power']),\n    NanoTexture: str(p['Nano-Texture']),\n    Cellular: str(p['Cellular']),\n    Ethernet: str(p['Ethernet']),\n    Keyboard: str(p['Keyboard']),\n    Moveability: str(p['Moveability']),\n    Stocked: str(p['Stocked']),\n    TDS_SKU: str(p['TDS SKU']),\n    INGRAM_SKU: str(p['INGRAM SKU']),\n    AppleCare_SKU: str(p['AppleCare SKU']),\n    Inventory: (rec && typeof rec === 'object') ? rec.total : (rec != null ? rec : 0),\n    TDS_Inventory: (rec && typeof rec === 'object' && rec.tds != null) ? rec.tds : null,\n    INGRAM_Inventory: (rec && typeof rec === 'object' && rec.im != null) ? rec.im : null,\n  });\n}\n\nconst payload = {\n  _meta: {\n    generated_at: new Date().toISOString(),\n    source: 'MarkIT CSV Setup tab \\u2014 daily refresh via n8n',\n    count: items.length,\n  },\n  items\n};\n\nconst today = new Date();\nconst dateStr = String(today.getMonth() + 1).padStart(2, '0') + '-' +\n  String(today.getDate()).padStart(2, '0') + '-' + today.getFullYear();\n\nreturn [{\n  json: {\n    parts_json: JSON.stringify(payload, null, 2),\n    count: items.length,\n    dateStr\n  }\n}];"
+        "jsCode": "// Build the parts.json payload for the staff lookup page.\nconst products = $('Google Sheets (Read)').all();\nconst inventoryMap = $('Code (Prepare Sheet Update)').first().json.inventoryMap || {};\n// Build AppleCare lookup: SKU -> AppleCare SKU\n// Pulled from the 'All Apple Products' tab (separate read node).\nconst acRows = $('Google Sheets (Read All Products)').all();\nconst appleCareMap = {};\nfor (const r of acRows) {\n  const k = r.json && r.json['SKU'];\n  const v = r.json && r.json['AppleCare SKU'];\n  if (k && v) appleCareMap[String(k).trim()] = String(v).trim();\n}\n\n\nfunction num(v) {\n  if (v == null || v === '') return null;\n  const cleaned = String(v).replace(/[^0-9.\\-]/g, '');\n  const n = parseFloat(cleaned);\n  return Number.isFinite(n) ? n : null;\n}\nfunction str(v) {\n  if (v == null) return null;\n  const s = String(v).trim();\n  return s === '' ? null : s;\n}\n\nconst items = [];\nfor (let i = 0; i < products.length; i++) {\n  const p = products[i].json;\n  const sku = str(p['SKU']);\n  if (!sku) continue;\n\n  const rowIndex = i + 2;\n  const rec = inventoryMap[rowIndex];\n\n  items.push({\n    SKU: sku,\n    Family: str(p['Family']),\n    Description: str(p['Description']),\n    MSRP: num(p['MSRP']),\n    DealerB: num(p['Dealer B']),\n    ScreenSize: str(p['Screen Size']),\n    Color: str(p['Color']),\n    Processor: str(p['Processor']),\n    Memory: str(p['Memory']),\n    Storage: str(p['Storage']),\n    Power: str(p['Power']),\n    NanoTexture: str(p['Nano-Texture']),\n    Cellular: str(p['Cellular']),\n    Ethernet: str(p['Ethernet']),\n    Keyboard: str(p['Keyboard']),\n    Moveability: str(p['Moveability']),\n    Stocked: str(p['Stocked']),\n    TDS_SKU: str(p['TDS SKU']),\n    INGRAM_SKU: str(p['INGRAM SKU']),\n    AppleCare_SKU: appleCareMap[sku] || null,\n    Inventory: (rec && typeof rec === 'object') ? rec.total : (rec != null ? rec : 0),\n    TDS_Inventory: (rec && typeof rec === 'object' && rec.tds != null) ? rec.tds : null,\n    INGRAM_Inventory: (rec && typeof rec === 'object' && rec.im != null) ? rec.im : null,\n  });\n}\n\nconst payload = {\n  _meta: {\n    generated_at: new Date().toISOString(),\n    source: 'MarkIT CSV Setup tab \\u2014 daily refresh via n8n',\n    count: items.length,\n  },\n  items\n};\n\nconst today = new Date();\nconst dateStr = String(today.getMonth() + 1).padStart(2, '0') + '-' +\n  String(today.getDate()).padStart(2, '0') + '-' + today.getFullYear();\n\nreturn [{\n  json: {\n    parts_json: JSON.stringify(payload, null, 2),\n    count: items.length,\n    dateStr\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -362,6 +362,37 @@
         "gmailOAuth2": {
           "id": "hY2enj3jpAfraW2D",
           "name": "Jim @ GatorTec"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ",
+          "mode": "list",
+          "cachedResultName": "GatorTec Parts & Customers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O8B7pBSvymC8NxR0grQIeJ38vFk0xhMLONIUFrPU2UQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "All Apple Products",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4400,
+        -200
+      ],
+      "id": "ac-read-all-products-001",
+      "name": "Google Sheets (Read All Products)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SH3KragVhEnhfwCY",
+          "name": "Google Sheets account"
         }
       }
     }
@@ -493,7 +524,7 @@
       "main": [
         [
           {
-            "node": "Code (Build Parts JSON)",
+            "node": "Google Sheets (Read All Products)",
             "type": "main",
             "index": 0
           }
@@ -527,6 +558,17 @@
         [
           {
             "node": "Gmail (Error Alert)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets (Read All Products)": {
+      "main": [
+        [
+          {
+            "node": "Code (Build Parts JSON)",
             "type": "main",
             "index": 0
           }

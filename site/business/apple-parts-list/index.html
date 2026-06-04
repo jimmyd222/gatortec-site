@@ -253,7 +253,7 @@
     <div class="mode-group" data-mode="msrp">
       <input type="radio" id="mode-msrp" name="price-mode" value="msrp">
       <label for="mode-msrp">MSRP −</label>
-      <input type="number" id="msrp-pct" placeholder="10" min="0" max="100" step="0.1" inputmode="decimal" aria-label="Percent off MSRP">
+      <input type="number" id="msrp-pct" placeholder="6" min="0" max="100" step="0.1" inputmode="decimal" aria-label="Percent off MSRP">
       <span class="suffix">%</span>
     </div>
     <div class="mode-group" data-mode="dealer">
@@ -376,8 +376,9 @@
     if (fam === 'macbook neo') return d;
 
     // Everything else follows the active pricing mode
-    if (state.priceMode === 'msrp' && state.msrpPct != null) {
-      return round2(msrp * (1 - state.msrpPct / 100));
+    if (state.priceMode === 'msrp') {
+      const pct = state.msrpPct != null ? state.msrpPct : 6;
+      return round2(msrp * (1 - pct / 100));
     }
     if (state.priceMode === 'dealer' && state.dealerPct != null) {
       const add = state.dealerAdd != null ? state.dealerAdd : 0.95;

@@ -159,6 +159,17 @@
   .drawer-emails .email-btn:hover { background: var(--mist); }
   .drawer-emails .email-btn.copied { background: #d5f0e0; border-color: #5fb87f; }
   .drawer-emails .email-btn span { font-weight: 600; }
+
+  .applecare-card { background: #f5f7fa; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin: 4px 0 18px; }
+  .applecare-card .ac-row { display: flex; gap: 14px; align-items: baseline; padding: 5px 0; }
+  .applecare-card .ac-row + .ac-row { border-top: 1px solid var(--mist); }
+  .applecare-card .ac-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--slate); width: 84px; flex-shrink: 0; }
+  .applecare-card .ac-value { font-size: 14px; color: var(--ink); flex: 1; cursor: pointer; user-select: none; padding: 3px 8px; margin: -3px -8px; border-radius: 4px; transition: background .12s; word-break: break-word; white-space: normal; }
+  .applecare-card .ac-value:hover { background: rgba(1,113,185,.08); }
+  .applecare-card .ac-value.copied { background: #d5f0e0; }
+  .applecare-card .ac-value.sku { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-weight: 700; }
+  .applecare-card .ac-value.price { font-weight: 700; color: var(--blue-ink); font-variant-numeric: tabular-nums; }
+  .applecare-card .ac-empty { font-size: 13px; color: var(--slate); font-style: italic; padding: 4px 0; }
   .drawer-emails .email-btn small { color: var(--slate); font-size: 11px; }
   .drawer-specs { font-size: 13px; line-height: 1.7; }
   .drawer-specs .row { display: flex; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--mist); }
@@ -282,6 +293,11 @@
 
     <h3>Copy email blocks</h3>
     <div class="drawer-emails" id="d-emails"></div>
+
+    <div id="d-applecare-block" hidden>
+      <h3>AppleCare+ for this device</h3>
+      <div class="applecare-card" id="d-applecare"></div>
+    </div>
 
     <h3>Specs</h3>
     <div class="drawer-specs" id="d-specs"></div>
@@ -671,6 +687,9 @@
       });
     });
 
+    // AppleCare+ card — only renders when device has a paired AppleCare SKU
+    renderAppleCareCard(item);
+
     // Specs — Techary view: just combined stock, no distributor breakdown
     const n = Number(item.Inventory);
     const stockLabel = Number.isFinite(n) && n > 0 ? String(n) : '—';
@@ -687,6 +706,42 @@
     document.getElementById('drawer').setAttribute('aria-hidden', 'false');
     document.getElementById('overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  function renderAppleCareCard(item) {
+    const block = document.getElementById('d-applecare-block');
+    const card = document.getElementById('d-applecare');
+    const acSku = item.AppleCare_SKU;
+    const fam = (item.Family || '').toLowerCase();
+    if (!acSku || fam.includes('applecare')) {
+      block.hidden = true;
+      return;
+    }
+    const acItem = state.items.find(it => it.SKU === acSku);
+    if (!acItem) {
+      block.hidden = false;
+      card.innerHTML = `<div class="ac-empty">Paired AppleCare+ SKU "${escapeHtml(acSku)}" not found in current data.</div>`;
+      return;
+    }
+    const acPrice = techaryPrice(acItem);
+    const acMSRP = gatorMSRP(acItem);
+    const rows = [
+      { label: 'SKU', value: acItem.SKU, cls: 'sku' },
+      { label: 'Description', value: acItem.Description || '—', cls: '' },
+      { label: 'MSRP', value: money(acMSRP), cls: 'price', copyVal: String(acMSRP || '') },
+      { label: 'Techary Cost', value: money(acPrice), cls: 'price', copyVal: String(acPrice) },
+    ];
+    card.innerHTML = rows.map(r => `<div class="ac-row">
+      <div class="ac-label">${escapeHtml(r.label)}</div>
+      <div class="ac-value ${r.cls}" data-copy="${escapeAttr(r.copyVal != null ? r.copyVal : r.value)}">${escapeHtml(r.value)}</div>
+    </div>`).join('');
+    block.hidden = false;
+    card.querySelectorAll('.ac-value').forEach(el => {
+      el.addEventListener('click', () => {
+        const v = el.getAttribute('data-copy') || el.textContent;
+        copy(v, el, 'Copied: ' + (v.length > 28 ? v.slice(0, 28) + '…' : v));
+      });
+    });
   }
 
   function setDrawerPrice(id, label, value) {

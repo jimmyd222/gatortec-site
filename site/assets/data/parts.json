@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-04T11:00:26.003Z",
+    "generated_at": "2026-06-04T13:50:58.267Z",
     "source": "MarkIT CSV Setup tab — daily refresh via n8n",
     "count": 1475
   },
@@ -25,9 +25,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350855",
       "INGRAM_SKU": "840T42",
-      "Inventory": 434,
-      "TDS_Inventory": 74,
-      "INGRAM_Inventory": 360
+      "Inventory": 430,
+      "TDS_Inventory": 71,
+      "INGRAM_Inventory": 359
     },
     {
       "SKU": "MDH84LL/A",
@@ -145,9 +145,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350875",
       "INGRAM_SKU": "850T00",
-      "Inventory": 72,
+      "Inventory": 73,
       "TDS_Inventory": 59,
-      "INGRAM_Inventory": 13
+      "INGRAM_Inventory": 14
     },
     {
       "SKU": "MDHE4LL/A",
@@ -169,8 +169,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350876",
       "INGRAM_SKU": "840T62",
-      "Inventory": 322,
-      "TDS_Inventory": 144,
+      "Inventory": 318,
+      "TDS_Inventory": 140,
       "INGRAM_Inventory": 178
     },
     {
@@ -193,9 +193,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350877",
       "INGRAM_SKU": "840T71",
-      "Inventory": 1635,
+      "Inventory": 1634,
       "TDS_Inventory": 804,
-      "INGRAM_Inventory": 831
+      "INGRAM_Inventory": 830
     },
     {
       "SKU": "MDHG4LL/A",
@@ -289,8 +289,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350973",
       "INGRAM_SKU": "840T57",
-      "Inventory": 400,
-      "TDS_Inventory": 328,
+      "Inventory": 399,
+      "TDS_Inventory": 327,
       "INGRAM_Inventory": 72
     },
     {
@@ -313,9 +313,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350974",
       "INGRAM_SKU": "850T02",
-      "Inventory": 29,
+      "Inventory": 28,
       "TDS_Inventory": 0,
-      "INGRAM_Inventory": 29
+      "INGRAM_Inventory": 28
     },
     {
       "SKU": "MDVA4LL/A",
@@ -337,9 +337,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350975",
       "INGRAM_SKU": "840T74",
-      "Inventory": 534,
+      "Inventory": 533,
       "TDS_Inventory": 186,
-      "INGRAM_Inventory": 348
+      "INGRAM_Inventory": 347
     },
     {
       "SKU": "MDVC4LL/A",
@@ -361,8 +361,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350884",
       "INGRAM_SKU": "840T48",
-      "Inventory": 839,
-      "TDS_Inventory": 557,
+      "Inventory": 902,
+      "TDS_Inventory": 620,
       "INGRAM_Inventory": 282
     },
     {
@@ -385,9 +385,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350885",
       "INGRAM_SKU": "840T82",
-      "Inventory": 318,
-      "TDS_Inventory": 30,
-      "INGRAM_Inventory": 288
+      "Inventory": 311,
+      "TDS_Inventory": 29,
+      "INGRAM_Inventory": 282
     },
     {
       "SKU": "MDVE4LL/A",
@@ -433,9 +433,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350887",
       "INGRAM_SKU": "840T64",
-      "Inventory": 43,
+      "Inventory": 56,
       "TDS_Inventory": 34,
-      "INGRAM_Inventory": 9
+      "INGRAM_Inventory": 22
     },
     {
       "SKU": "MDVH4LL/A",
@@ -457,8 +457,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350888",
       "INGRAM_SKU": "850T03",
-      "Inventory": 2467,
-      "TDS_Inventory": 1677,
+      "Inventory": 2466,
+      "TDS_Inventory": 1676,
       "INGRAM_Inventory": 790
     },
     {
@@ -505,9 +505,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350976",
       "INGRAM_SKU": "840T56",
-      "Inventory": 395,
-      "TDS_Inventory": 140,
-      "INGRAM_Inventory": 255
+      "Inventory": 401,
+      "TDS_Inventory": 149,
+      "INGRAM_Inventory": 252
     },
     {
       "SKU": "MDVQ4LL/A",
@@ -529,8 +529,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350977",
       "INGRAM_SKU": "840T63",
-      "Inventory": 597,
-      "TDS_Inventory": 543,
+      "Inventory": 492,
+      "TDS_Inventory": 438,
       "INGRAM_Inventory": 54
     },
     {
@@ -857,7 +857,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -865,8 +865,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350890",
       "INGRAM_SKU": "840T90",
-      "Inventory": 1742,
-      "TDS_Inventory": 1544,
+      "Inventory": 1617,
+      "TDS_Inventory": 1419,
       "INGRAM_Inventory": 198
     },
     {
@@ -881,7 +881,7 @@
       "Memory": "24GB",
       "Storage": "2TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -905,7 +905,7 @@
       "Memory": "36GB",
       "Storage": "2TB",
       "Power": "96W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -929,7 +929,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -937,9 +937,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350893",
       "INGRAM_SKU": "840T91",
-      "Inventory": 4519,
+      "Inventory": 4518,
       "TDS_Inventory": 2931,
-      "INGRAM_Inventory": 1588
+      "INGRAM_Inventory": 1587
     },
     {
       "SKU": "MGDT4LL/A",
@@ -953,7 +953,7 @@
       "Memory": "24GB",
       "Storage": "2TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -977,7 +977,7 @@
       "Memory": "36GB",
       "Storage": "2TB",
       "Power": "96W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1001,7 +1001,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1025,7 +1025,7 @@
       "Memory": "48GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1049,7 +1049,7 @@
       "Memory": "36GB",
       "Storage": "2TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1073,7 +1073,7 @@
       "Memory": "48GB",
       "Storage": "2TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1081,8 +1081,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350918",
       "INGRAM_SKU": "840T72",
-      "Inventory": 414,
-      "TDS_Inventory": 337,
+      "Inventory": 509,
+      "TDS_Inventory": 432,
       "INGRAM_Inventory": 77
     },
     {
@@ -1097,7 +1097,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1121,7 +1121,7 @@
       "Memory": "48GB",
       "Storage": "1TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1129,8 +1129,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350920",
       "INGRAM_SKU": "840T58",
-      "Inventory": 5364,
-      "TDS_Inventory": 2644,
+      "Inventory": 5524,
+      "TDS_Inventory": 2804,
       "INGRAM_Inventory": 2720
     },
     {
@@ -1145,7 +1145,7 @@
       "Memory": "36GB",
       "Storage": "2TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1169,7 +1169,7 @@
       "Memory": "48GB",
       "Storage": "2TB",
       "Power": "140W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1177,8 +1177,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350951",
       "INGRAM_SKU": "840T43",
-      "Inventory": 232,
-      "TDS_Inventory": 231,
+      "Inventory": 231,
+      "TDS_Inventory": 230,
       "INGRAM_Inventory": 1
     },
     {
@@ -1193,7 +1193,7 @@
       "Memory": "32GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1201,9 +1201,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350921",
       "INGRAM_SKU": "840T59",
-      "Inventory": 76,
+      "Inventory": 63,
       "TDS_Inventory": 0,
-      "INGRAM_Inventory": 76
+      "INGRAM_Inventory": 63
     },
     {
       "SKU": "MJ3E4LL/A",
@@ -1217,7 +1217,7 @@
       "Memory": "32GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1241,7 +1241,7 @@
       "Memory": "24GB",
       "Storage": "2TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1265,7 +1265,7 @@
       "Memory": "24GB",
       "Storage": "2TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1273,9 +1273,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15350881",
       "INGRAM_SKU": "840T83",
-      "Inventory": 167,
+      "Inventory": 166,
       "TDS_Inventory": 139,
-      "INGRAM_Inventory": 28
+      "INGRAM_Inventory": 27
     },
     {
       "SKU": "MDE14LL/A",
@@ -1289,7 +1289,7 @@
       "Memory": "16GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1297,9 +1297,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15098111",
       "INGRAM_SKU": "350C41",
-      "Inventory": 2648,
+      "Inventory": 2647,
       "TDS_Inventory": 2276,
-      "INGRAM_Inventory": 372
+      "INGRAM_Inventory": 371
     },
     {
       "SKU": "MDE34LL/A",
@@ -1313,7 +1313,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1337,7 +1337,7 @@
       "Memory": "16GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1345,9 +1345,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15098114",
       "INGRAM_SKU": "350C42",
-      "Inventory": 2361,
+      "Inventory": 2360,
       "TDS_Inventory": 1749,
-      "INGRAM_Inventory": 612
+      "INGRAM_Inventory": 611
     },
     {
       "SKU": "MDE64LL/A",
@@ -1361,7 +1361,7 @@
       "Memory": "24GB",
       "Storage": "1TB",
       "Power": "70W",
-      "NanoTexture": "Standard",
+      "NanoTexture": "No",
       "Cellular": null,
       "Ethernet": null,
       "Keyboard": null,
@@ -1369,9 +1369,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15098115",
       "INGRAM_SKU": "350C60",
-      "Inventory": 1821,
-      "TDS_Inventory": 1693,
-      "INGRAM_Inventory": 128
+      "Inventory": 1831,
+      "TDS_Inventory": 1705,
+      "INGRAM_Inventory": 126
     },
     {
       "SKU": "SXKH2LL/A",
@@ -5137,8 +5137,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "14309295",
       "INGRAM_SKU": "RF8243",
-      "Inventory": 69,
-      "TDS_Inventory": 0,
+      "Inventory": 80,
+      "TDS_Inventory": 11,
       "INGRAM_Inventory": 69
     },
     {
@@ -16105,8 +16105,8 @@
       "Stocked": null,
       "TDS_SKU": "15098126",
       "INGRAM_SKU": "350C82",
-      "Inventory": 397,
-      "TDS_Inventory": 223,
+      "Inventory": 417,
+      "TDS_Inventory": 243,
       "INGRAM_Inventory": 174
     },
     {
@@ -16345,9 +16345,9 @@
       "Stocked": null,
       "TDS_SKU": "15098136",
       "INGRAM_SKU": "370C33",
-      "Inventory": 2025,
+      "Inventory": 2024,
       "TDS_Inventory": 1370,
-      "INGRAM_Inventory": 655
+      "INGRAM_Inventory": 654
     },
     {
       "SKU": "MDYK4LL/A",
@@ -16369,9 +16369,9 @@
       "Stocked": null,
       "TDS_SKU": "15098137",
       "INGRAM_SKU": "370C40",
-      "Inventory": 499,
+      "Inventory": 498,
       "TDS_Inventory": 219,
-      "INGRAM_Inventory": 280
+      "INGRAM_Inventory": 279
     },
     {
       "SKU": "MDYL4LL/A",
@@ -16393,9 +16393,9 @@
       "Stocked": null,
       "TDS_SKU": "15098138",
       "INGRAM_SKU": "360C95",
-      "Inventory": 549,
-      "TDS_Inventory": 193,
-      "INGRAM_Inventory": 356
+      "Inventory": 600,
+      "TDS_Inventory": 243,
+      "INGRAM_Inventory": 357
     },
     {
       "SKU": "MDYM4LL/A",
@@ -16657,8 +16657,8 @@
       "Stocked": null,
       "TDS_SKU": "15098176",
       "INGRAM_SKU": "350C67",
-      "Inventory": 258,
-      "TDS_Inventory": 146,
+      "Inventory": 257,
+      "TDS_Inventory": 145,
       "INGRAM_Inventory": 112
     },
     {
@@ -17209,8 +17209,8 @@
       "Stocked": null,
       "TDS_SKU": "14290288",
       "INGRAM_SKU": "NU1899",
-      "Inventory": 5593,
-      "TDS_Inventory": 3478,
+      "Inventory": 5592,
+      "TDS_Inventory": 3477,
       "INGRAM_Inventory": 2115
     },
     {
@@ -17785,8 +17785,8 @@
       "Stocked": null,
       "TDS_SKU": "14569093",
       "INGRAM_SKU": "SL6586",
-      "Inventory": 44592,
-      "TDS_Inventory": 28783,
+      "Inventory": 44563,
+      "TDS_Inventory": 28754,
       "INGRAM_Inventory": 15809
     },
     {
@@ -17857,9 +17857,9 @@
       "Stocked": null,
       "TDS_SKU": "14569096",
       "INGRAM_SKU": "SL6600",
-      "Inventory": 5390,
+      "Inventory": 5387,
       "TDS_Inventory": 4575,
-      "INGRAM_Inventory": 815
+      "INGRAM_Inventory": 812
     },
     {
       "SKU": "MD4G4LL/A",
@@ -18025,8 +18025,8 @@
       "Stocked": null,
       "TDS_SKU": "14569112",
       "INGRAM_SKU": "SL6588",
-      "Inventory": 24,
-      "TDS_Inventory": 24,
+      "Inventory": 25,
+      "TDS_Inventory": 25,
       "INGRAM_Inventory": 0
     },
     {
@@ -18361,9 +18361,9 @@
       "Stocked": null,
       "TDS_SKU": "15347460",
       "INGRAM_SKU": "770T09",
-      "Inventory": 3239,
+      "Inventory": 3237,
       "TDS_Inventory": 2392,
-      "INGRAM_Inventory": 847
+      "INGRAM_Inventory": 845
     },
     {
       "SKU": "MH314LL/A",
@@ -18481,9 +18481,9 @@
       "Stocked": null,
       "TDS_SKU": "15347483",
       "INGRAM_SKU": "770T45",
-      "Inventory": 175,
+      "Inventory": 177,
       "TDS_Inventory": 139,
-      "INGRAM_Inventory": 36
+      "INGRAM_Inventory": 38
     },
     {
       "SKU": "MH374LL/A",
@@ -18745,9 +18745,9 @@
       "Stocked": null,
       "TDS_SKU": "15347494",
       "INGRAM_SKU": "770T17",
-      "Inventory": 2921,
+      "Inventory": 2919,
       "TDS_Inventory": 2276,
-      "INGRAM_Inventory": 645
+      "INGRAM_Inventory": 643
     },
     {
       "SKU": "MH5P4LL/A",
@@ -18793,9 +18793,9 @@
       "Stocked": null,
       "TDS_SKU": "15347496",
       "INGRAM_SKU": "770T23",
-      "Inventory": 266,
+      "Inventory": 265,
       "TDS_Inventory": 168,
-      "INGRAM_Inventory": 98
+      "INGRAM_Inventory": 97
     },
     {
       "SKU": "MH5T4LL/A",
@@ -18841,9 +18841,9 @@
       "Stocked": null,
       "TDS_SKU": "15347498",
       "INGRAM_SKU": "770T71",
-      "Inventory": 815,
+      "Inventory": 805,
       "TDS_Inventory": 445,
-      "INGRAM_Inventory": 370
+      "INGRAM_Inventory": 360
     },
     {
       "SKU": "MH5V4LL/A",
@@ -18913,9 +18913,9 @@
       "Stocked": null,
       "TDS_SKU": "15347502",
       "INGRAM_SKU": "770T48",
-      "Inventory": 124,
-      "TDS_Inventory": 54,
-      "INGRAM_Inventory": 70
+      "Inventory": 135,
+      "TDS_Inventory": 59,
+      "INGRAM_Inventory": 76
     },
     {
       "SKU": "MH5Y4LL/A",
@@ -18937,8 +18937,8 @@
       "Stocked": null,
       "TDS_SKU": "15347503",
       "INGRAM_SKU": "770T80",
-      "Inventory": 31,
-      "TDS_Inventory": 3,
+      "Inventory": 30,
+      "TDS_Inventory": 2,
       "INGRAM_Inventory": 28
     },
     {
@@ -19201,8 +19201,8 @@
       "Stocked": null,
       "TDS_SKU": "15347425",
       "INGRAM_SKU": "770T56",
-      "Inventory": 260,
-      "TDS_Inventory": 23,
+      "Inventory": 259,
+      "TDS_Inventory": 22,
       "INGRAM_Inventory": 237
     },
     {
@@ -19489,9 +19489,9 @@
       "Stocked": null,
       "TDS_SKU": "15347437",
       "INGRAM_SKU": "770T28",
-      "Inventory": 59,
+      "Inventory": 57,
       "TDS_Inventory": 3,
-      "INGRAM_Inventory": 56
+      "INGRAM_Inventory": 54
     },
     {
       "SKU": "MH9E4LL/A",
@@ -19585,9 +19585,9 @@
       "Stocked": null,
       "TDS_SKU": "15347441",
       "INGRAM_SKU": "770T36",
-      "Inventory": 151,
-      "TDS_Inventory": 47,
-      "INGRAM_Inventory": 104
+      "Inventory": 187,
+      "TDS_Inventory": 103,
+      "INGRAM_Inventory": 84
     },
     {
       "SKU": "MH9J4LL/A",
@@ -23689,8 +23689,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15355959",
       "INGRAM_SKU": "920T78",
-      "Inventory": 2436,
-      "TDS_Inventory": 2436,
+      "Inventory": 2782,
+      "TDS_Inventory": 2782,
       "INGRAM_Inventory": 0
     },
     {
@@ -23809,9 +23809,9 @@
       "Stocked": "No",
       "TDS_SKU": "15358692",
       "INGRAM_SKU": "960T58",
-      "Inventory": 0,
+      "Inventory": 3,
       "TDS_Inventory": 0,
-      "INGRAM_Inventory": 0
+      "INGRAM_Inventory": 3
     },
     {
       "SKU": "Z1ML00057",
@@ -25873,9 +25873,9 @@
       "Stocked": "Yes",
       "TDS_SKU": "15355949",
       "INGRAM_SKU": "110U20",
-      "Inventory": 3416,
+      "Inventory": 3424,
       "TDS_Inventory": 3175,
-      "INGRAM_Inventory": 241
+      "INGRAM_Inventory": 249
     },
     {
       "SKU": "Z1MZ0002A",
@@ -26041,8 +26041,8 @@
       "Stocked": "Yes",
       "TDS_SKU": "15355962",
       "INGRAM_SKU": "900T14",
-      "Inventory": 269,
-      "TDS_Inventory": 269,
+      "Inventory": 268,
+      "TDS_Inventory": 268,
       "INGRAM_Inventory": 0
     },
     {
@@ -28633,9 +28633,9 @@
       "Stocked": "No",
       "TDS_SKU": "15358374",
       "INGRAM_SKU": "910T61",
-      "Inventory": 14,
+      "Inventory": 1,
       "TDS_Inventory": 0,
-      "INGRAM_Inventory": 14
+      "INGRAM_Inventory": 1
     },
     {
       "SKU": "Z1L0000YZ",
@@ -33361,8 +33361,8 @@
       "Stocked": null,
       "TDS_SKU": "14004531",
       "INGRAM_SKU": "NJ6872",
-      "Inventory": 3979,
-      "TDS_Inventory": 1235,
+      "Inventory": 3976,
+      "TDS_Inventory": 1232,
       "INGRAM_Inventory": 2744
     },
     {
@@ -33601,8 +33601,8 @@
       "Stocked": null,
       "TDS_SKU": "9597495",
       "INGRAM_SKU": "JV4081",
-      "Inventory": 1023,
-      "TDS_Inventory": 156,
+      "Inventory": 1022,
+      "TDS_Inventory": 155,
       "INGRAM_Inventory": 867
     },
     {
@@ -33625,8 +33625,8 @@
       "Stocked": null,
       "TDS_SKU": "14309230",
       "INGRAM_SKU": "RF7744",
-      "Inventory": 2601,
-      "TDS_Inventory": 1387,
+      "Inventory": 2600,
+      "TDS_Inventory": 1386,
       "INGRAM_Inventory": 1214
     },
     {
@@ -33649,8 +33649,8 @@
       "Stocked": null,
       "TDS_SKU": "14309231",
       "INGRAM_SKU": "RF7745",
-      "Inventory": 3358,
-      "TDS_Inventory": 1221,
+      "Inventory": 3356,
+      "TDS_Inventory": 1219,
       "INGRAM_Inventory": 2137
     },
     {
@@ -33673,8 +33673,8 @@
       "Stocked": null,
       "TDS_SKU": "14309232",
       "INGRAM_SKU": "RF7746",
-      "Inventory": 5345,
-      "TDS_Inventory": 979,
+      "Inventory": 5342,
+      "TDS_Inventory": 976,
       "INGRAM_Inventory": 4366
     },
     {
@@ -33697,9 +33697,9 @@
       "Stocked": null,
       "TDS_SKU": "14309233",
       "INGRAM_SKU": "RF7750",
-      "Inventory": 1015,
+      "Inventory": 1012,
       "TDS_Inventory": 507,
-      "INGRAM_Inventory": 508
+      "INGRAM_Inventory": 505
     },
     {
       "SKU": "MXK73LL/A",
@@ -33721,9 +33721,9 @@
       "Stocked": null,
       "TDS_SKU": "14309234",
       "INGRAM_SKU": "RF7751",
-      "Inventory": 2669,
-      "TDS_Inventory": 637,
-      "INGRAM_Inventory": 2032
+      "Inventory": 2666,
+      "TDS_Inventory": 635,
+      "INGRAM_Inventory": 2031
     },
     {
       "SKU": "MXK83LL/A",
@@ -33745,9 +33745,9 @@
       "Stocked": null,
       "TDS_SKU": "14309235",
       "INGRAM_SKU": "RF7752",
-      "Inventory": 915,
+      "Inventory": 914,
       "TDS_Inventory": 689,
-      "INGRAM_Inventory": 226
+      "INGRAM_Inventory": 225
     },
     {
       "SKU": "MXK93AM/A",
@@ -33769,8 +33769,8 @@
       "Stocked": null,
       "TDS_SKU": "14309236",
       "INGRAM_SKU": "RF7753",
-      "Inventory": 1633,
-      "TDS_Inventory": 661,
+      "Inventory": 1632,
+      "TDS_Inventory": 660,
       "INGRAM_Inventory": 972
     },
     {
@@ -33865,9 +33865,9 @@
       "Stocked": null,
       "TDS_SKU": "14542485",
       "INGRAM_SKU": "SG2289",
-      "Inventory": 298,
+      "Inventory": 286,
       "TDS_Inventory": 0,
-      "INGRAM_Inventory": 298
+      "INGRAM_Inventory": 286
     },
     {
       "SKU": "MFEL4LL/A",
@@ -33937,9 +33937,9 @@
       "Stocked": null,
       "TDS_SKU": "15350930",
       "INGRAM_SKU": "840T67",
-      "Inventory": 18,
-      "TDS_Inventory": 15,
-      "INGRAM_Inventory": 3
+      "Inventory": 15,
+      "TDS_Inventory": 14,
+      "INGRAM_Inventory": 1
     },
     {
       "SKU": "MFEQ4LL/A",
@@ -34009,8 +34009,8 @@
       "Stocked": null,
       "TDS_SKU": "15350933",
       "INGRAM_SKU": "840T73",
-      "Inventory": 773,
-      "TDS_Inventory": 529,
+      "Inventory": 772,
+      "TDS_Inventory": 528,
       "INGRAM_Inventory": 244
     },
     {
@@ -34033,9 +34033,9 @@
       "Stocked": null,
       "TDS_SKU": "15350934",
       "INGRAM_SKU": "840T49",
-      "Inventory": 285,
+      "Inventory": 284,
       "TDS_Inventory": 199,
-      "INGRAM_Inventory": 86
+      "INGRAM_Inventory": 85
     },
     {
       "SKU": "MFF04LL/A",
@@ -34249,9 +34249,9 @@
       "Stocked": null,
       "TDS_SKU": "14035528",
       "INGRAM_SKU": "NN0465",
-      "Inventory": 10064,
+      "Inventory": 10061,
       "TDS_Inventory": 3058,
-      "INGRAM_Inventory": 7006
+      "INGRAM_Inventory": 7003
     },
     {
       "SKU": "MUQX3AM/A",
@@ -34321,9 +34321,9 @@
       "Stocked": null,
       "TDS_SKU": "14379110",
       "INGRAM_SKU": "S45911",
-      "Inventory": 22338,
-      "TDS_Inventory": 12505,
-      "INGRAM_Inventory": 9833
+      "Inventory": 22308,
+      "TDS_Inventory": 12493,
+      "INGRAM_Inventory": 9815
     },
     {
       "SKU": "MGD74LL/A",
@@ -34345,9 +34345,9 @@
       "Stocked": null,
       "TDS_SKU": "15007616",
       "INGRAM_SKU": "Z55984",
-      "Inventory": 2100,
+      "Inventory": 1982,
       "TDS_Inventory": 1982,
-      "INGRAM_Inventory": 118
+      "INGRAM_Inventory": 0
     },
     {
       "SKU": "MGDM4LL/A",
@@ -34441,9 +34441,9 @@
       "Stocked": null,
       "TDS_SKU": "15272189",
       "INGRAM_SKU": "800P71",
-      "Inventory": 2739,
+      "Inventory": 2385,
       "TDS_Inventory": 2335,
-      "INGRAM_Inventory": 404
+      "INGRAM_Inventory": 50
     },
     {
       "SKU": "MFEA4LL/A",
@@ -34465,9 +34465,9 @@
       "Stocked": null,
       "TDS_SKU": "15272190",
       "INGRAM_SKU": "800P44",
-      "Inventory": 1885,
+      "Inventory": 1995,
       "TDS_Inventory": 1238,
-      "INGRAM_Inventory": 647
+      "INGRAM_Inventory": 757
     },
     {
       "SKU": "MW2Q3AM/A",
@@ -34609,9 +34609,9 @@
       "Stocked": null,
       "TDS_SKU": "14542486",
       "INGRAM_SKU": "SG2288",
-      "Inventory": 17476,
-      "TDS_Inventory": 12275,
-      "INGRAM_Inventory": 5201
+      "Inventory": 17441,
+      "TDS_Inventory": 12274,
+      "INGRAM_Inventory": 5167
     },
     {
       "SKU": "MWML3AM/A",
@@ -34705,9 +34705,9 @@
       "Stocked": null,
       "TDS_SKU": "8828250",
       "INGRAM_SKU": "HZ4846",
-      "Inventory": 6292,
+      "Inventory": 6291,
       "TDS_Inventory": 2789,
-      "INGRAM_Inventory": 3503
+      "INGRAM_Inventory": 3502
     },
     {
       "SKU": "MWR03LL/A",
@@ -34729,9 +34729,9 @@
       "Stocked": null,
       "TDS_SKU": "9684486",
       "INGRAM_SKU": "JW4073",
-      "Inventory": 49,
+      "Inventory": 48,
       "TDS_Inventory": 10,
-      "INGRAM_Inventory": 39
+      "INGRAM_Inventory": 38
     },
     {
       "SKU": "MWR23LL/A",
@@ -34753,8 +34753,8 @@
       "Stocked": null,
       "TDS_SKU": "9684487",
       "INGRAM_SKU": "JW4074",
-      "Inventory": 713,
-      "TDS_Inventory": 274,
+      "Inventory": 723,
+      "TDS_Inventory": 284,
       "INGRAM_Inventory": 439
     },
     {
@@ -34801,9 +34801,9 @@
       "Stocked": null,
       "TDS_SKU": "9684488",
       "INGRAM_SKU": "JW4079",
-      "Inventory": 1580,
+      "Inventory": 1577,
       "TDS_Inventory": 133,
-      "INGRAM_Inventory": 1447
+      "INGRAM_Inventory": 1444
     },
     {
       "SKU": "MX2D3AM/A",
@@ -34825,9 +34825,9 @@
       "Stocked": null,
       "TDS_SKU": "9684485",
       "INGRAM_SKU": "JW4070",
-      "Inventory": 6250,
-      "TDS_Inventory": 2715,
-      "INGRAM_Inventory": 3535
+      "Inventory": 6238,
+      "TDS_Inventory": 2716,
+      "INGRAM_Inventory": 3522
     },
     {
       "SKU": "MW2P3AM/A",
@@ -35113,9 +35113,9 @@
       "Stocked": null,
       "TDS_SKU": "14569227",
       "INGRAM_SKU": "SL6918",
-      "Inventory": 229,
+      "Inventory": 228,
       "TDS_Inventory": 149,
-      "INGRAM_Inventory": 80
+      "INGRAM_Inventory": 79
     },
     {
       "SKU": "MGYX4LL/A",
@@ -35137,8 +35137,8 @@
       "Stocked": null,
       "TDS_SKU": "15098106",
       "INGRAM_SKU": "330C86",
-      "Inventory": 0,
-      "TDS_Inventory": 0,
+      "Inventory": 4,
+      "TDS_Inventory": 4,
       "INGRAM_Inventory": 0
     },
     {
@@ -35233,9 +35233,9 @@
       "Stocked": null,
       "TDS_SKU": "14195304",
       "INGRAM_SKU": "NR8122",
-      "Inventory": 18000,
-      "TDS_Inventory": 7659,
-      "INGRAM_Inventory": 10341
+      "Inventory": 18294,
+      "TDS_Inventory": 7959,
+      "INGRAM_Inventory": 10335
     },
     {
       "SKU": "MXP63LL/A",
@@ -35257,9 +35257,9 @@
       "Stocked": null,
       "TDS_SKU": "14195303",
       "INGRAM_SKU": "NR8121",
-      "Inventory": 28840,
+      "Inventory": 28837,
       "TDS_Inventory": 13681,
-      "INGRAM_Inventory": 15159
+      "INGRAM_Inventory": 15156
     },
     {
       "SKU": "MFHP4LL/A",
@@ -35281,9 +35281,9 @@
       "Stocked": null,
       "TDS_SKU": "15007615",
       "INGRAM_SKU": "Z55683",
-      "Inventory": 22175,
-      "TDS_Inventory": 12980,
-      "INGRAM_Inventory": 9195
+      "Inventory": 22171,
+      "TDS_Inventory": 12979,
+      "INGRAM_Inventory": 9192
     },
     {
       "SKU": "MHWM4AM/A",
@@ -35305,8 +35305,8 @@
       "Stocked": null,
       "TDS_SKU": "15384644",
       "INGRAM_SKU": "760U62",
-      "Inventory": 244,
-      "TDS_Inventory": 73,
+      "Inventory": 289,
+      "TDS_Inventory": 118,
       "INGRAM_Inventory": 171
     },
     {
@@ -35353,8 +35353,8 @@
       "Stocked": null,
       "TDS_SKU": "15384642",
       "INGRAM_SKU": "760U19",
-      "Inventory": 370,
-      "TDS_Inventory": 146,
+      "Inventory": 367,
+      "TDS_Inventory": 143,
       "INGRAM_Inventory": 224
     },
     {
@@ -35377,8 +35377,8 @@
       "Stocked": null,
       "TDS_SKU": "15384643",
       "INGRAM_SKU": "760U60",
-      "Inventory": 348,
-      "TDS_Inventory": 62,
+      "Inventory": 372,
+      "TDS_Inventory": 86,
       "INGRAM_Inventory": 286
     },
     {
@@ -35401,8 +35401,8 @@
       "Stocked": null,
       "TDS_SKU": "15384645",
       "INGRAM_SKU": "760U63",
-      "Inventory": 261,
-      "TDS_Inventory": 127,
+      "Inventory": 260,
+      "TDS_Inventory": 126,
       "INGRAM_Inventory": 134
     }
   ]

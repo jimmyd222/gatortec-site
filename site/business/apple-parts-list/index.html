@@ -170,6 +170,36 @@
     z-index: 200; pointer-events: none;
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Multi-select column filter */
+  .col-filter-wrap { position: relative; }
+  .col-filter-btn {
+    width: 100%; padding: 4px 6px; font-size: 12px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    border-radius: 5px; cursor: pointer; font-family: inherit;
+    text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 4px;
+  }
+  .col-filter-btn:hover { border-color: var(--blue); }
+  .col-filter-btn.active { border-color: var(--blue); background: rgba(1,113,185,.06); color: var(--blue); font-weight: 600; }
+  .col-filter-btn .caret { font-size: 10px; opacity: .6; }
+  .col-filter-pop {
+    position: absolute; top: calc(100% + 2px); left: 0; z-index: 100;
+    background: #fff; border: 1px solid var(--line); border-radius: 6px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.14);
+    min-width: 100%; max-width: 280px; max-height: 280px; overflow-y: auto;
+    padding: 4px 0; font-weight: 400;
+  }
+  .col-filter-pop .pop-actions { display: flex; gap: 8px; padding: 4px 10px 6px; border-bottom: 1px solid var(--mist); }
+  .col-filter-pop .pop-actions button { font-size: 11px; padding: 2px 6px; border: 0; background: none; color: var(--blue); cursor: pointer; }
+  .col-filter-pop .pop-actions button:hover { text-decoration: underline; }
+  .col-filter-pop label {
+    display: flex; gap: 8px; align-items: center;
+    padding: 5px 12px; cursor: pointer; font-size: 13px; color: var(--ink);
+    user-select: none; white-space: nowrap;
+  }
+  .col-filter-pop label:hover { background: #f0f4f8; }
+  .col-filter-pop input { accent-color: var(--blue); margin: 0; }
+
 </style>
 <link rel="canonical" href="https://gatortec.com/business/apple-parts-list/">
 <meta property="og:type" content="website">
@@ -432,14 +462,16 @@
       for (const [k, v] of Object.entries(state.colFilters)) {
         if (k === skipColKey) continue;
         if (!v) continue;
-        // Per-column search type matches as substring (case-insensitive)
         const col = COLS.find(c => c.key === k);
         if (!col) continue;
         const itVal = String(it[k] == null ? '' : it[k]).toLowerCase();
         if (col.filter === 'search') {
-          if (!itVal.includes(String(v).toLowerCase())) return false;
+          const needle = String(Array.isArray(v) ? v[0] : v).toLowerCase();
+          if (!itVal.includes(needle)) return false;
         } else {
-          if (itVal !== String(v).toLowerCase()) return false;
+          // Multi-value: match if itVal equals ANY of the selected values
+          const arr = Array.isArray(v) ? v : [v];
+          if (arr.length > 0 && !arr.some(x => itVal === String(x).toLowerCase())) return false;
         }
       }
       return true;
@@ -473,26 +505,86 @@
     });
     filterRow.innerHTML = COLS.map(c => {
       if (c.filter === 'none') return '<th></th>';
-      const current = state.colFilters[c.key] || '';
+      const sel = state.colFilters[c.key] || [];
       if (c.filter === 'search') {
-        return `<th><input type="text" class="col-search ${current ? 'active' : ''}" data-col="${c.key}" value="${escapeAttr(current)}" aria-label="Filter ${escapeAttr(c.label)}" placeholder="filter…" autocomplete="off" spellcheck="false"></th>`;
+        const val = typeof sel === 'string' ? sel : (sel[0] || '');
+        return `<th><input type="text" class="col-search ${val ? 'active' : ''}" data-col="${c.key}" value="${escapeAttr(val)}" aria-label="Filter ${escapeAttr(c.label)}" placeholder="filter…" autocomplete="off" spellcheck="false"></th>`;
       }
+      const selArr = Array.isArray(sel) ? sel : (sel ? [sel] : []);
       const pool = filteredItems(c.key);
       const values = distinctValues(pool, c.key);
-      const opts = values.map(v => `<option value="${escapeAttr(v)}"${current === v ? ' selected' : ''}>${escapeHtml(v)}</option>`).join('');
-      return `<th><select class="col-filter ${current ? 'active' : ''}" data-col="${c.key}" aria-label="Filter ${escapeAttr(c.label)}">
-        <option value="">All</option>
-        ${opts}
-      </select></th>`;
+      const isActive = selArr.length > 0;
+      const btnLabel = selArr.length === 0 ? 'All'
+                     : selArr.length === 1 ? selArr[0]
+                     : selArr.length + ' selected';
+      const checks = values.map(v => `<label><input type="checkbox" value="${escapeAttr(v)}"${selArr.includes(v) ? ' checked' : ''}> <span>${escapeHtml(v)}</span></label>`).join('');
+      return `<th><div class="col-filter-wrap">
+        <button type="button" class="col-filter-btn ${isActive ? 'active' : ''}" data-col="${c.key}" aria-haspopup="true" aria-expanded="false">
+          <span>${escapeHtml(btnLabel)}</span><span class="caret">▾</span>
+        </button>
+        <div class="col-filter-pop" data-col="${c.key}" hidden>
+          <div class="pop-actions">
+            <button type="button" class="pop-all" data-col="${c.key}">Select all</button>
+            <button type="button" class="pop-clear" data-col="${c.key}">Clear</button>
+          </div>
+          ${checks}
+        </div>
+      </div></th>`;
     }).join('');
 
-    // Wire up
-    filterRow.querySelectorAll('.col-filter').forEach(sel => {
-      sel.addEventListener('change', e => {
-        const k = e.target.getAttribute('data-col');
-        if (e.target.value) state.colFilters[k] = e.target.value;
-        else delete state.colFilters[k];
-        render();
+    // Wire up — toggle popover on button click
+    filterRow.querySelectorAll('.col-filter-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const k = btn.getAttribute('data-col');
+        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+        const willOpen = pop.hidden;
+        // close all popovers
+        filterRow.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
+        filterRow.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+        if (willOpen) {
+          pop.hidden = false;
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+    // Checkbox toggle inside popover — update filter, keep popover open
+    filterRow.querySelectorAll('.col-filter-pop input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', e => {
+        const pop = e.target.closest('.col-filter-pop');
+        const k = pop.getAttribute('data-col');
+        const v = e.target.value;
+        let arr = Array.isArray(state.colFilters[k]) ? state.colFilters[k].slice() : (state.colFilters[k] ? [state.colFilters[k]] : []);
+        if (e.target.checked) { if (!arr.includes(v)) arr.push(v); }
+        else { arr = arr.filter(x => x !== v); }
+        if (arr.length === 0) delete state.colFilters[k];
+        else state.colFilters[k] = arr;
+        updateFilterButtonLabel(k);
+        renderBody();
+      });
+    });
+    // Select all / clear actions
+    filterRow.querySelectorAll('.col-filter-pop .pop-all').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const k = btn.getAttribute('data-col');
+        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+        const vals = [...pop.querySelectorAll('input[type="checkbox"]')].map(i => i.value);
+        state.colFilters[k] = vals.slice();
+        pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = true);
+        updateFilterButtonLabel(k);
+        renderBody();
+      });
+    });
+    filterRow.querySelectorAll('.col-filter-pop .pop-clear').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const k = btn.getAttribute('data-col');
+        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+        delete state.colFilters[k];
+        pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+        updateFilterButtonLabel(k);
+        renderBody();
       });
     });
     filterRow.querySelectorAll('.col-search').forEach(inp => {
@@ -500,16 +592,18 @@
         const k = e.target.getAttribute('data-col');
         if (e.target.value.trim()) state.colFilters[k] = e.target.value.trim();
         else delete state.colFilters[k];
-        renderBody(); // skip header re-render to keep focus
+        renderBody();
         updateActiveClasses();
       });
     });
   }
 
   function updateActiveClasses() {
-    document.querySelectorAll('.col-filter, .col-search').forEach(el => {
+    document.querySelectorAll('.col-filter-btn, .col-search').forEach(el => {
       const k = el.getAttribute('data-col');
-      if (state.colFilters[k]) el.classList.add('active');
+      const v = state.colFilters[k];
+      const isActive = Array.isArray(v) ? v.length > 0 : !!v;
+      if (isActive) el.classList.add('active');
       else el.classList.remove('active');
     });
   }
@@ -763,6 +857,32 @@
       document.getElementById('meta').textContent = 'Failed to load: ' + err.message;
       document.getElementById('tbody').innerHTML = '<tr><td colspan="20" class="empty">Failed to load data.</td></tr>';
     });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.col-filter-wrap')) {
+      document.querySelectorAll('.col-filter-pop').forEach(p => {
+        if (!p.hidden) {
+          p.hidden = true;
+          const k = p.getAttribute('data-col');
+          const btn = document.querySelector(`.col-filter-btn[data-col="${k}"]`);
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+          // Refresh other columns' available options now that filter has settled
+          renderHeaders();
+        }
+      });
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.col-filter-pop').forEach(p => {
+        if (!p.hidden) {
+          p.hidden = true;
+          renderHeaders();
+        }
+      });
+    }
+  });
+
 })();
 </script>
 

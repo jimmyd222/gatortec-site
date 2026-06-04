@@ -524,25 +524,70 @@
       </div></th>`;
     }).join('');
 
-    // Wire up — toggle popover on button click
-    filterRow.querySelectorAll('.col-filter-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const k = btn.getAttribute('data-col');
-        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
-        const willOpen = pop.hidden;
-        // close all popovers
-        filterRow.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
-        filterRow.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-        if (willOpen) {
-          pop.hidden = false;
-          btn.setAttribute('aria-expanded', 'true');
+    // Delegated click handler on filterRow — handles all popover interactions
+    if (!filterRow._popoverDelegated) {
+      filterRow._popoverDelegated = true;
+
+      filterRow.addEventListener('click', e => {
+        const t = e.target;
+
+        // Filter button → toggle popover
+        const filterBtn = t.closest('.col-filter-btn');
+        if (filterBtn) {
+          e.stopPropagation();
+          const k = filterBtn.getAttribute('data-col');
+          const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+          const willOpen = pop.hidden;
+          filterRow.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
+          filterRow.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+          if (willOpen) {
+            pop.hidden = false;
+            filterBtn.setAttribute('aria-expanded', 'true');
+          }
+          return;
+        }
+
+        // Select all
+        const allBtn = t.closest('.pop-all');
+        if (allBtn) {
+          e.stopPropagation();
+          const k = allBtn.getAttribute('data-col');
+          const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+          const vals = [...pop.querySelectorAll('input[type="checkbox"]')].map(i => i.value);
+          state.colFilters[k] = vals.slice();
+          pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = true);
+          updateFilterButtonLabel(k);
+          renderBody();
+          return;
+        }
+
+        // Clear
+        const clearBtn = t.closest('.pop-clear');
+        if (clearBtn) {
+          e.stopPropagation();
+          const k = clearBtn.getAttribute('data-col');
+          const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
+          delete state.colFilters[k];
+          pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+          updateFilterButtonLabel(k);
+          renderBody();
+          return;
+        }
+
+        // Done
+        const doneBtn = t.closest('.pop-done');
+        if (doneBtn) {
+          e.stopPropagation();
+          document.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
+          document.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+          render(); // full re-render so cascade refresh applies AND body is guaranteed fresh
+          return;
         }
       });
-    });
-    // Checkbox toggle inside popover — update filter, keep popover open
-    filterRow.querySelectorAll('.col-filter-pop input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', e => {
+
+      // Delegated change handler for checkboxes (one listener catches every popover checkbox)
+      filterRow.addEventListener('change', e => {
+        if (!e.target.matches('.col-filter-pop input[type="checkbox"]')) return;
         const pop = e.target.closest('.col-filter-pop');
         const k = pop.getAttribute('data-col');
         const v = e.target.value;
@@ -554,40 +599,7 @@
         updateFilterButtonLabel(k);
         renderBody();
       });
-    });
-    // Select all / clear actions
-    filterRow.querySelectorAll('.col-filter-pop .pop-all').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const k = btn.getAttribute('data-col');
-        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
-        const vals = [...pop.querySelectorAll('input[type="checkbox"]')].map(i => i.value);
-        state.colFilters[k] = vals.slice();
-        pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = true);
-        updateFilterButtonLabel(k);
-        renderBody();
-      });
-    });
-    filterRow.querySelectorAll('.col-filter-pop .pop-clear').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const k = btn.getAttribute('data-col');
-        const pop = filterRow.querySelector(`.col-filter-pop[data-col="${k}"]`);
-        delete state.colFilters[k];
-        pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
-        updateFilterButtonLabel(k);
-        renderBody();
-      });
-    });
-    filterRow.querySelectorAll('.col-filter-pop .pop-done').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        // Close all popovers + cascade-refresh other columns' option lists
-        document.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
-        document.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-        renderHeaders();
-      });
-    });
+    }
     filterRow.querySelectorAll('.col-search').forEach(inp => {
       inp.addEventListener('input', e => {
         const k = e.target.getAttribute('data-col');

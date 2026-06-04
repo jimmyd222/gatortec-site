@@ -204,9 +204,11 @@
     position: absolute; top: calc(100% + 2px); left: 0; z-index: 100;
     background: #fff; border: 1px solid var(--line); border-radius: 6px;
     box-shadow: 0 4px 18px rgba(0,0,0,.14);
-    min-width: 100%; max-width: 280px; max-height: 280px; overflow-y: auto;
+    min-width: 100%; max-width: 240px; max-height: 220px; overflow-y: auto;
     padding: 4px 0; font-weight: 400;
   }
+  .col-filter-pop .pop-done { background: var(--blue); color: #fff; padding: 3px 10px; border-radius: 4px; margin-left: auto; }
+  .col-filter-pop .pop-done:hover { background: var(--blue-deep, #005a94); text-decoration: none; }
   .col-filter-pop .pop-actions { display: flex; gap: 8px; padding: 4px 10px 6px; border-bottom: 1px solid var(--mist); }
   .col-filter-pop .pop-actions button { font-size: 11px; padding: 2px 6px; border: 0; background: none; color: var(--blue); cursor: pointer; }
   .col-filter-pop .pop-actions button:hover { text-decoration: underline; }
@@ -515,6 +517,7 @@
           <div class="pop-actions">
             <button type="button" class="pop-all" data-col="${c.key}">Select all</button>
             <button type="button" class="pop-clear" data-col="${c.key}">Clear</button>
+            <button type="button" class="pop-done" data-col="${c.key}">Done</button>
           </div>
           ${checks}
         </div>
@@ -574,6 +577,15 @@
         pop.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
         updateFilterButtonLabel(k);
         renderBody();
+      });
+    });
+    filterRow.querySelectorAll('.col-filter-pop .pop-done').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        // Close all popovers + cascade-refresh other columns' option lists
+        document.querySelectorAll('.col-filter-pop').forEach(p => p.hidden = true);
+        document.querySelectorAll('.col-filter-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+        renderHeaders();
       });
     });
     filterRow.querySelectorAll('.col-search').forEach(inp => {

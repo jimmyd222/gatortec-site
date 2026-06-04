@@ -788,8 +788,9 @@
     const rows = [
       { label: 'SKU', value: acItem.SKU, cls: 'sku' },
       { label: 'Description', value: acItem.Description || '—', cls: '' },
-      { label: 'Customer', value: money(acPrice), cls: 'price', copyVal: String(acPrice) },
       { label: 'MSRP', value: money(gatorMSRP(acItem)), cls: 'price', copyVal: String(gatorMSRP(acItem) || '') },
+      { label: 'Dealer B', value: money(acItem.DealerB), cls: 'price', copyVal: String(acItem.DealerB != null ? acItem.DealerB : '') },
+      { label: 'Customer', value: money(acPrice), cls: 'price', copyVal: String(acPrice) },
     ];
     card.innerHTML = rows.map(r => `<div class="ac-row">
       <div class="ac-label">${escapeHtml(r.label)}</div>

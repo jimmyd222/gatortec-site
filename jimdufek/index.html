@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="robots" content="index, follow">
+<title>Jim Dufek</title>
+<meta name="description" content="Jim Dufek — builder, rider, wanderer, dad.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jim Dufek">
+<meta property="og:description" content="Builder. Rider. Wanderer. Dad.">
+<meta property="og:url" content="https://jimdufek.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #e8e6e1;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Subtle vignette + grain */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background:
+      radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,.55) 100%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0, rgba(255,255,255,.012) 1px, transparent 1px, transparent 3px);
+  }
+  main {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 60px 28px;
+    text-align: center;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: .42em;
+    text-transform: uppercase;
+    color: #6c6962;
+    margin-bottom: 32px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: clamp(56px, 12vw, 132px);
+    line-height: .95; letter-spacing: -.02em;
+    margin-bottom: 28px;
+    color: #f4f1ea;
+  }
+  h1 em {
+    font-style: italic; font-weight: 400; color: #c9a04b;
+  }
+  .tagline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic; font-weight: 400;
+    font-size: clamp(17px, 2.4vw, 22px);
+    color: #a8a39a;
+    max-width: 38ch;
+    line-height: 1.55;
+    margin-bottom: 56px;
+  }
+  .glyphs {
+    display: flex; gap: clamp(18px, 4vw, 38px);
+    flex-wrap: wrap; justify-content: center;
+    max-width: 600px;
+  }
+  .glyph {
+    width: 36px; height: 36px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #5d5a52;
+    transition: color .4s ease, transform .4s ease;
+    cursor: default;
+    position: relative;
+  }
+  .glyph svg { width: 100%; height: 100%; stroke-width: 1.2; }
+  .glyph:hover { color: #c9a04b; transform: translateY(-3px); }
+  .glyph::after {
+    content: attr(data-hint);
+    position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 13px; color: #c9a04b;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .glyph:hover::after { opacity: 1; }
+  footer {
+    position: fixed; bottom: 22px; left: 0; right: 0;
+    text-align: center; font-size: 10.5px; letter-spacing: .32em;
+    text-transform: uppercase; color: #3d3b36; z-index: 2;
+  }
+  footer a { color: inherit; text-decoration: none; transition: color .2s; }
+  footer a:hover { color: #c9a04b; }
+  @media (max-width: 520px) {
+    .glyphs { gap: 22px; }
+    .glyph { width: 30px; height: 30px; }
+    .glyph::after { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Jim · Dufek</div>
+  <h1>Some weeks I work.<br>Other weeks I <em>disappear</em>.</h1>
+  <p class="tagline">Behind the keyboard there is a person. Behind the person, a list of hobbies that probably shouldn't share a calendar.</p>
+
+  <div class="glyphs" aria-label="Things I do when no one is looking">
+
+    <span class="glyph" data-hint="two wheels" aria-label="Motorcycles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/>
+        <path d="M5 17h6l2-6h3M14 7h3l1 3"/>
+      </svg>
+    </span>
+
+    <span class="glyph" data-hint="the magic kingdom" aria-label="Disney">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 21V11l3-3v-2l2 1V6l2-1V3l1 1 1-1v2l2 1v1l2-1v2l3 3v10"/>
+        <path d="M9 21v-5h2v5M13 21v-5h2v5"/>
+        <circle cx="12" cy="9" r="0.6" fill="currentColor"/>
+      </svg>
+    </span>
+
+    <span class="glyph" data-hint="downhill, sideways" aria-label="Snowboarding">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 20l16-14"/>
+        <path d="M3 20l2 2M19 6l2-2"/>
+        <circle cx="9" cy="14" r="1"/>
+        <circle cx="13" cy="10" r="1"/>
+      </svg>
+    </span>
+
+    <span class="glyph" data-hint="the small one" aria-label="My daughter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 21s-7-4.5-7-10a4.5 4.5 0 0 1 7-3.5A4.5 4.5 0 0 1 19 11c0 5.5-7 10-7 10z"/>
+      </svg>
+    </span>
+
+    <span class="glyph" data-hint="somewhere else" aria-label="Travel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8-2.5V19l-3 1.5V22l5-1 5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+    </span>
+
+    <span class="glyph" data-hint="the day job" aria-label="Work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="7" width="18" height="13" rx="1.5"/>
+        <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+        <path d="M3 12h18"/>
+      </svg>
+    </span>
+
+  </div>
+</main>
+
+<footer>
+  <a href="/lostbag/">if you've lost something here →</a>
+</footer>
+</body>
+</html>

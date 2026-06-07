@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f3e5b8">
+<meta name="robots" content="noindex, nofollow">
+<title>MISSING: One Bag · jimdufek.com</title>
+<meta name="description" content="A bag has gone missing. There is a reward. There are no questions asked. (Okay, maybe a few questions.)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Stardos+Stencil:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    background: #f3e5b8;
+    background-image:
+      radial-gradient(ellipse at 30% 20%, rgba(120,80,40,.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(120,80,40,.22) 0%, transparent 55%);
+    color: #2a1a0a;
+    min-height: 100vh;
+    padding: 28px 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Coffee stains */
+  body::before, body::after {
+    content: ""; position: fixed; pointer-events: none;
+    border-radius: 50%; opacity: .18;
+    background: radial-gradient(circle, #6b4226 0%, transparent 70%);
+    z-index: 0;
+  }
+  body::before { top: 10%; right: 5%; width: 180px; height: 180px; }
+  body::after { bottom: 15%; left: 4%; width: 140px; height: 140px; }
+  .poster {
+    position: relative; z-index: 1;
+    max-width: 720px; margin: 0 auto;
+    background: #fbf2d2;
+    border: 3px solid #2a1a0a;
+    box-shadow:
+      0 0 0 6px #fbf2d2,
+      0 0 0 8px #2a1a0a,
+      0 14px 40px rgba(0,0,0,.18);
+    padding: 36px 36px 40px;
+    transform: rotate(-.4deg);
+  }
+  .stamp {
+    position: absolute; top: 20px; right: -10px;
+    transform: rotate(8deg);
+    border: 3px solid #a52424; color: #a52424;
+    padding: 6px 14px; font-family: 'Stardos Stencil', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+    opacity: .88;
+  }
+  h1 {
+    font-family: 'Stardos Stencil', 'Impact', sans-serif;
+    font-weight: 700;
+    font-size: clamp(48px, 11vw, 96px);
+    line-height: .9; letter-spacing: .02em;
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.06);
+  }
+  .subhead {
+    text-align: center;
+    font-family: 'Stardos Stencil', sans-serif;
+    font-size: clamp(20px, 3.4vw, 28px);
+    letter-spacing: .08em;
+    margin-bottom: 22px;
+  }
+  .divider {
+    border: 0; border-top: 2px dashed #2a1a0a; margin: 14px 0; opacity: .4;
+  }
+  .image-block {
+    text-align: center;
+    margin: 18px 0 24px;
+  }
+  .image-block svg {
+    max-width: 280px; width: 70%; height: auto;
+  }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: #5a3a1a;
+    margin-top: 8px;
+  }
+  .details {
+    background: rgba(255,255,255,.4);
+    border: 2px dashed #2a1a0a;
+    padding: 16px 22px;
+    margin: 14px 0 22px;
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
+  .details p { margin-bottom: 8px; }
+  .details p:last-child { margin-bottom: 0; }
+  .details strong { background: #f7d56a; padding: 0 4px; }
+  .reward-line {
+    text-align: center;
+    font-family: 'Stardos Stencil', sans-serif;
+    font-size: clamp(20px, 3.6vw, 30px);
+    margin: 24px 0 8px;
+    letter-spacing: .04em;
+  }
+  .reward-fine {
+    text-align: center; font-size: 13px; font-style: italic; color: #5a3a1a;
+    margin-bottom: 26px;
+  }
+  /* The form */
+  .form-section {
+    margin-top: 22px;
+    border-top: 2px dashed #2a1a0a; padding-top: 26px;
+  }
+  .form-section h2 {
+    font-family: 'Stardos Stencil', sans-serif; font-size: 22px;
+    letter-spacing: .06em; margin-bottom: 6px; text-align: center;
+  }
+  .form-section .ftag { display: block; text-align: center; font-style: italic; font-size: 13px; color: #5a3a1a; margin-bottom: 18px; }
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+    margin-bottom: 5px; font-weight: 700;
+  }
+  .field input, .field textarea {
+    width: 100%; font-family: 'Special Elite', monospace; font-size: 15px;
+    padding: 10px 12px; background: rgba(255,255,255,.7); color: #2a1a0a;
+    border: 2px solid #2a1a0a; border-radius: 2px;
+  }
+  .field input:focus, .field textarea:focus { outline: none; background: #fff; }
+  .field textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+  .honeypot { position: absolute; left: -9999px; opacity: 0; }
+  button[type="submit"] {
+    display: block; margin: 22px auto 0;
+    background: #2a1a0a; color: #fbf2d2; border: 0;
+    font-family: 'Stardos Stencil', sans-serif; font-size: 18px; letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 36px; cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  button[type="submit"]:hover { background: #4a2e16; }
+  button[type="submit"]:active { transform: translateY(1px); }
+  .text-line {
+    margin-top: 24px; text-align: center; font-size: 15px; line-height: 1.6;
+  }
+  .text-line a {
+    display: inline-block;
+    background: #2a1a0a; color: #fbf2d2;
+    padding: 8px 14px; margin-top: 4px;
+    font-family: 'Stardos Stencil', sans-serif; letter-spacing: .08em;
+    text-decoration: none; font-size: 17px;
+  }
+  .text-line .warn {
+    display: block; margin-top: 10px; font-size: 12px; font-style: italic;
+    color: #5a3a1a; max-width: 340px; margin-left: auto; margin-right: auto;
+  }
+  .home-link {
+    position: relative; z-index: 1;
+    display: block; text-align: center;
+    margin-top: 28px; color: #4a2e16; font-size: 12px;
+    letter-spacing: .25em; text-transform: uppercase; text-decoration: none;
+  }
+  .home-link:hover { color: #2a1a0a; }
+  .ok-banner {
+    display: none; background: #2d5a2d; color: #f0f6e8;
+    padding: 14px 18px; margin-bottom: 18px; border: 2px solid #1a3a1a;
+    font-family: 'Stardos Stencil', sans-serif; letter-spacing: .06em; text-align: center;
+  }
+  .ok-banner.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="poster">
+  <div class="stamp">URGENT</div>
+
+  <h1>MISSING</h1>
+  <div class="subhead">One (1) bag · last seen fleeing the scene</div>
+
+  <hr class="divider">
+
+  <div class="image-block" aria-hidden="true">
+    <!-- A silly hand-drawn-style luggage with legs running -->
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2a1a0a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <!-- ground -->
+      <path d="M20 175 L180 175" stroke-width="2" stroke-dasharray="4 3"/>
+      <!-- bag body (slightly tilted as if mid-stride) -->
+      <g transform="rotate(-8 100 105)">
+        <rect x="55" y="60" width="90" height="80" rx="6"/>
+        <!-- handle on top -->
+        <path d="M85 60 L85 48 Q85 42 90 42 L110 42 Q115 42 115 48 L115 60"/>
+        <!-- bag detail lines -->
+        <path d="M55 80 L145 80"/>
+        <path d="M70 95 L130 95"/>
+        <!-- ID tag -->
+        <path d="M125 60 L132 70 L120 78 L115 67 Z" fill="#f7d56a"/>
+        <path d="M127 64 L129 67"/>
+      </g>
+      <!-- legs (sticking out from underneath) -->
+      <path d="M82 138 Q78 158 70 168 L62 170"/>
+      <path d="M118 138 Q122 152 134 158 L142 158"/>
+      <!-- shoes -->
+      <ellipse cx="60" cy="170" rx="9" ry="4" fill="#2a1a0a"/>
+      <ellipse cx="143" cy="158" rx="9" ry="4" fill="#2a1a0a"/>
+      <!-- motion lines behind -->
+      <path d="M20 100 L40 102" stroke-width="2"/>
+      <path d="M18 115 L36 117" stroke-width="2"/>
+      <path d="M22 130 L42 132" stroke-width="2"/>
+      <!-- little exclamation -->
+      <text x="160" y="50" font-family="Stardos Stencil, Impact, sans-serif" font-size="34" fill="#a52424" stroke="none">!</text>
+    </svg>
+    <div class="caption">Approximate likeness. May now be wearing a sombrero.</div>
+  </div>
+
+  <div class="details">
+    <p><strong>Description:</strong> One (1) bag, somewhere between "carry-on" and "what did you pack in this thing." Last seen abandoning its owner at baggage claim and walking with intent.</p>
+    <p><strong>Considered armed only with:</strong> hairspray, three (3) souvenirs, and an inexplicable amount of small shampoo bottles.</p>
+    <p><strong>Distinguishing features:</strong> Smells faintly of regret and gift-shop perfume.</p>
+  </div>
+
+  <div class="reward-line">⚜ REWARD if found alive ⚜</div>
+  <div class="reward-fine">(Or even mostly alive. A good story counts too.)</div>
+
+  <hr class="divider">
+
+  <div class="form-section">
+    <h2>Found it? Tell me everything.</h2>
+    <span class="ftag">— or text the number below, that works too —</span>
+
+    <div class="ok-banner" id="ok-banner">Thanks. I'll be in touch — and the reward stands.</div>
+
+    <form id="lostbag-form" action="https://gatortec.app.n8n.cloud/webhook/lostbag" method="POST">
+      <input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave blank">
+
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="Name" required autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="contact">How to reach you</label>
+        <input type="text" id="contact" name="Contact" required placeholder="phone or email — whichever you'll actually answer">
+      </div>
+
+      <div class="field">
+        <label for="where">Where did you find it?</label>
+        <input type="text" id="where" name="Where" required placeholder="city, airport, gas station bathroom, your couch…">
+      </div>
+
+      <div class="field">
+        <label for="story">The story (optional but encouraged)</label>
+        <textarea id="story" name="Story" placeholder="How exactly did this happen? Was the bag walking, or running? Did it apologize?"></textarea>
+      </div>
+
+      <button type="submit">Claim the reward →</button>
+    </form>
+
+    <div class="text-line">
+      <em>or, if you prefer the old-fashioned way:</em><br>
+      <a href="sms:+13523333069">📱 text +1 (352) 333-3069</a>
+      <span class="warn">Don't call — you'll just hear a voicemail recording. Yes, really.</span>
+    </div>
+  </div>
+
+</div>
+
+<a class="home-link" href="/">← back to jimdufek.com</a>
+
+<script>
+  // Submit form via fetch so we can show a thank-you inline instead of redirecting.
+  (function () {
+    var form = document.getElementById('lostbag-form');
+    var banner = document.getElementById('ok-banner');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      // If webhook URL hasn't been swapped in yet, let it submit normally so we don't silently fail.
+      if (form.action.indexOf('REPLACE_WITH') !== -1) return;
+      e.preventDefault();
+      var data = new FormData(form);
+      fetch(form.action, { method: 'POST', body: data })
+        .then(function () {
+          form.style.display = 'none';
+          banner.classList.add('show');
+          banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        })
+        .catch(function () {
+          // Fall back to native submission if fetch fails
+          form.submit();
+        });
+    });
+  })();
+</script>
+</body>
+</html>

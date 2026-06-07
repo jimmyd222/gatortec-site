@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /lostbag/
+
+Sitemap: https://jimdufek.com/sitemap.xml

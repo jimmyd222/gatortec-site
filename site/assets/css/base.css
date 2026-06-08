@@ -866,7 +866,7 @@ footer .apple-legal p:last-child { margin-bottom: 0; }
 .form-card .submit:active { transform: scale(.98); }
 .form-card .submit svg { stroke: currentColor; }
 
-.form-card .honeypot {
+.form-card .form-extra {
   position: absolute; left: -9999px; width: 1px; height: 1px;
   opacity: 0; pointer-events: none;
 }

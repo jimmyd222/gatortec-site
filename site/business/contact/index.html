@@ -57,7 +57,12 @@
 <form class="form-card" action="https://gatortec.app.n8n.cloud/webhook/contact-b2b" method="POST">
 
 <input type="hidden" name="_cc" id="b-cc-field" value="">
-<input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank">
+<!-- Spam controls. _alt_contact = honeypot (visually hidden, real users
+     never see it). _form_ts = page-load timestamp; n8n rejects submissions
+     that arrive < 3s after load. Don't rename these without also updating
+     the n8n workflow (Code nodes in GatorTec Contact Forms.json). -->
+<input type="text"   name="_alt_contact" id="b-alt-contact" class="form-extra" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank">
+<input type="hidden" name="_form_ts"     id="b-form-ts" value="">
 
 <div class="field-row">
 <div class="field">
@@ -185,5 +190,5 @@ Gainesville, FL 32614
 </div></div></footer>
 <script src="../../assets/js/nav.js?v=3" defer></script>
 <script src="../../assets/js/analytics.js?v=3" defer></script>
-<script>(function(){var f=document.querySelector(".form-card");if(!f)return;var em=f.querySelector('input[name="email"]');var cc=f.querySelector("#b-cc-field");f.addEventListener("submit",function(){if(em&&cc&&em.value)cc.value=em.value.trim();},true);})();</script>
+<script>(function(){var f=document.querySelector(".form-card");if(!f)return;var em=f.querySelector('input[name="email"]');var cc=f.querySelector("#b-cc-field");var ts=f.querySelector("#b-form-ts");if(ts)ts.value=Date.now();f.addEventListener("submit",function(){if(em&&cc&&em.value)cc.value=em.value.trim();},true);})();</script>
 </body></html>

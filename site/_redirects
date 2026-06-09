@@ -1,15 +1,24 @@
+# ============================================================================
 # WordPress page slugs → new locations
+# ============================================================================
 /accessibility-statement       /legal/accessibility.html      301
 /apple-parts-list              /business/apple-parts-list/    301
 /business                      /business/                     301
 /consumer                      /consumer/                     301
 /contact                       /contact/                      301
 /faq                           /business/faq/                 301
+/info/accessibility            /legal/accessibility.html      301
+/info/privacy                  /legal/privacy.html            301
+/info/terms                    /legal/terms.html              301
+/iphone-5-battery-program      /service/                      301
+/iphone-5-battery-program/     /service/                      301
 /products                      /products/                     301
 /service                       /service/                      301
 /terms-conditions              /legal/terms.html              301
 
+# ============================================================================
 # Product slug shortcuts
+# ============================================================================
 /imac                          /products/desktops/imac/                  301
 /mac-mini                      /products/desktops/mac-mini/              301
 /mac-studio                    /products/desktops/mac-studio/            301
@@ -20,11 +29,69 @@
 # WordPress ?page_id=N permalinks are handled client-side by a small shim in /index.html
 # (Cloudflare Pages _redirects does not match on query strings.)
 
+# ============================================================================
 # Old WordPress feed URLs (occasionally crawled)
-/feed                /sitemap.xml                             301
-/feed/*              /sitemap.xml                             301
-/wp-content/*        /                                        410
-/wp-admin/*          /                                        410
-/wp-login.php        /                                        410
+# ============================================================================
+/feed                          /sitemap.xml                              301
+/feed/*                        /sitemap.xml                              301
+
+# ============================================================================
+# Old WordPress blog posts (Apple tips/news, not migrated) → home
+# Preserves any external backlink equity to the apex domain.
+# ============================================================================
+/2020/*                        /                                         301
+/2021/*                        /                                         301
+/2022/*                        /                                         301
+/2023/*                        /                                         301
+/2024/*                        /                                         301
+/2025/*                        /                                         301
+
+# ============================================================================
+# Hack remediation — prior site was compromised with SEO spam pages.
+# Returning 410 (Gone) so Google deindexes faster than 404.
+# Source: Search Console export, June 2026.
+# ============================================================================
+
+# WordPress hack artifacts
+/wp-content/*                  /                                         410
+/wp-includes/*                 /                                         410
+/wp-admin/*                    /                                         410
+/wp-login.php                  /                                         410
+/wp-config.php                 /                                         410
+/wp-cron.php                   /                                         410
+/wp-comments-post.php          /                                         410
+/xmlrpc.php                    /                                         410
+/LWZYW/*                       /                                         410
+
+# Injected baby/mothercare spam catalog
+/baby-clothing/*               /                                         410
+/bathing-care/*                /                                         410
+/bedding-furniture/*           /                                         410
+/boys-clothing/*               /                                         410
+/brand-a-z/*                   /                                         410
+/categories/*                  /                                         410
+/clothing-essentials/*         /                                         410
+/clothing/*                    /                                         410
+/feeding-safety/*              /                                         410
+/footwear/*                    /                                         410
+/girls-clothing/*              /                                         410
+/kids-accessories/*            /                                         410
+/maternity/*                   /                                         410
+/new-arrival/*                 /                                         410
+/swimwear.html                 /                                         410
+/toys-activity/*               /                                         410
+/travel-essentials/*           /                                         410
+
+# Hijacked platform endpoints / crawler probes
+/called                        /                                         410
+/consumer/kanal-resmi/         /                                         410
+/contact/contac                /                                         410
+/customer/account              /                                         410
+/datalayer/*                   /                                         410
+/deposit                       /                                         410
+/deposit/*                     /                                         410
+/referer/                      /                                         410
+/session                       /                                         410
+/sign_in/                      /                                         410
 
 # Catch-all (must be last) — Cloudflare Pages handles 404 automatically

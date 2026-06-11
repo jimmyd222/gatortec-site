@@ -11,10 +11,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        200,
-        200
+        -656,
+        2096
       ],
-      "id": "wh-b2b",
+      "id": "32cb41f2-3f4e-453e-b683-e6b1ba3e8dfa",
       "name": "Webhook (B2B Form)",
       "webhookId": "contact-b2b-001"
     },
@@ -25,10 +25,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        420,
-        200
+        -448,
+        2096
       ],
-      "id": "code-b2b",
+      "id": "03980716-c0aa-4c4e-bf00-0cedfbbacb39",
       "name": "Code (Build B2B Message)"
     },
     {
@@ -37,7 +37,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "loose"
+            "typeValidation": "loose",
+            "version": 1
           },
           "conditions": [
             {
@@ -56,10 +57,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        640,
-        200
+        -224,
+        2096
       ],
-      "id": "if-b2b",
+      "id": "63b5eb69-34f5-45f0-a66d-a6f413a45a02",
       "name": "If not honeypot (B2B)"
     },
     {
@@ -79,10 +80,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        860,
-        100
+        0,
+        2000
       ],
-      "id": "http-b2b",
+      "id": "7f2fe554-d84b-4197-8ddd-b478e3874118",
       "name": "Send via Gmail API (B2B)",
       "credentials": {
         "gmailOAuth2": {
@@ -102,10 +103,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1080,
-        200
+        224,
+        2096
       ],
-      "id": "respond-b2b",
+      "id": "050e8bf0-f86e-489f-928a-05824589bb4d",
       "name": "Redirect to Thanks (B2B)"
     },
     {
@@ -118,10 +119,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        200,
-        600
+        -656,
+        2496
       ],
-      "id": "wh-store",
+      "id": "2512e4e0-8ff7-47da-b8a5-43bfdba02579",
       "name": "Webhook (Consumer Form)",
       "webhookId": "contact-store-001"
     },
@@ -132,10 +133,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        420,
-        600
+        -448,
+        2496
       ],
-      "id": "code-store",
+      "id": "8c3eeb9c-78bf-4f00-8766-4595fbb26714",
       "name": "Code (Build Store Message)"
     },
     {
@@ -144,7 +145,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "loose"
+            "typeValidation": "loose",
+            "version": 1
           },
           "conditions": [
             {
@@ -163,10 +165,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        640,
-        600
+        -224,
+        2496
       ],
-      "id": "if-store",
+      "id": "da32cfdf-f549-448f-b008-e0219dcbe2b0",
       "name": "If not honeypot (Store)"
     },
     {
@@ -186,10 +188,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        860,
-        500
+        0,
+        2400
       ],
-      "id": "http-store",
+      "id": "a85a02de-6fcd-42c7-a9b6-6749a5a17107",
       "name": "Send via Gmail API (Store)",
       "credentials": {
         "gmailOAuth2": {
@@ -209,42 +211,42 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1080,
-        600
+        224,
+        2496
       ],
-      "id": "respond-store",
+      "id": "deb8e7c9-427b-4511-90fe-1da0c17fd1a9",
       "name": "Redirect to Thanks (Store)"
     },
     {
       "parameters": {
         "httpMethod": "POST",
         "path": "lostbag",
+        "responseMode": "responseNode",
         "options": {
           "rawBody": false
-        },
-        "responseMode": "responseNode"
+        }
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        200,
-        720
+        -656,
+        2608
       ],
-      "id": "lostbag-webhook-001",
+      "id": "6b69bfe5-d28b-4378-a2c5-b7b6f83a572a",
       "name": "Webhook (Lost Bag)",
       "webhookId": "lostbag-jimdufek-2026"
     },
     {
       "parameters": {
-        "jsCode": "// Build the Lost Bag email\nconst raw = $input.first().json.body || $input.first().json;\n\nfunction str(v) { return v == null ? '' : String(v).trim(); }\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')\n    .replace(/\\\"/g, '&quot;').replace(/'/g, '&#39;');\n}\nfunction encH(s) {\n  if (/[^\\x00-\\x7F]/.test(s)) return '=?UTF-8?B?' + Buffer.from(s, 'utf-8').toString('base64') + '?=';\n  return s;\n}\nfunction b64url(s) {\n  return Buffer.from(s, 'utf-8').toString('base64').replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n}\n\nconst data = {\n  name:    str(raw['Name']),\n  contact: str(raw['Contact']),\n  where:   str(raw['Where']),\n  story:   str(raw['Story']),\n  gotcha:  str(raw['_gotcha']),\n};\n\nif (data.gotcha) return [{ json: { skip: true, reason: 'honeypot' } }];\nif (!data.name || !data.contact) {\n  throw new Error('Missing required fields: name or contact');\n}\n\nconst FROM_NAME = 'Lost Bag Bot';\nconst FROM_EMAIL = 'jim@gatortec.com';\nconst TO_EMAIL = 'jim@jimdufek.com';\n\nconst subject = 'Lost bag tip from ' + data.name;\n\nconst rows = [\n  ['Name', data.name],\n  ['How to reach them', data.contact],\n  ['Where they found it', data.where || '(not provided)'],\n];\n\nfunction rowsHtml(rs) {\n  return rs.map((r, i) => {\n    const bg = i % 2 === 0 ? '#f5f7fa' : '#ffffff';\n    return '<tr><td style=\"padding:11px 16px;color:#5b6671;font-weight:600;width:38%;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:13.5px\">' + esc(r[0]) + '</td><td style=\"padding:11px 16px;color:#1a1d21;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:14.5px\">' + esc(r[1]) + '</td></tr>';\n  }).join('');\n}\n\nconst html = '<!doctype html><html><body style=\"margin:0;padding:0;background:#f5f7fa;font-family:-apple-system,Helvetica,Arial,sans-serif;color:#1a1d21\">' +\n  '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;background:#f5f7fa;padding:24px 0\"><tr><td align=\"center\">' +\n  '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;max-width:620px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)\">' +\n  '<tr><td style=\"background:#2a1a0a;color:#fbf2d2;padding:22px 32px\">' +\n    '<div style=\"font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:4px\">jimdufek.com</div>' +\n    '<div style=\"font-size:22px;font-weight:700\">Someone found your bag.</div>' +\n  '</td></tr>' +\n  '<tr><td style=\"padding:28px 32px 8px\">' +\n    '<p style=\"margin:0 0 22px;font-size:15px;line-height:1.55\">A tip came in via the lost-bag page. Reach out via the contact below \\u2014 and pay the reward.</p>' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid #dde1e6\">' +\n      rowsHtml(rows) +\n    '</table>' +\n    (data.story ? ('<div style=\"margin-top:24px\">' +\n      '<div style=\"font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b6671;margin-bottom:8px\">Their story</div>' +\n      '<div style=\"background:#f5f7fa;border-left:3px solid #c9a04b;padding:14px 18px;border-radius:6px;font-size:15px;line-height:1.55;color:#1a1d21;white-space:pre-wrap\">' + esc(data.story) + '</div>' +\n    '</div>') : '') +\n  '</td></tr>' +\n  '<tr><td style=\"padding:18px 32px 28px;border-top:1px solid #eceff2\">' +\n    '<p style=\"margin:0;font-size:12.5px;line-height:1.5;color:#8b95a0\">Reply to this email to respond directly. Submitted via jimdufek.com/lostbag.</p>' +\n  '</td></tr>' +\n  '</table></td></tr></table></body></html>';\n\nconst plain = [\n  'A lost-bag tip came in via jimdufek.com/lostbag.',\n  '',\n  'Name: ' + data.name,\n  'How to reach them: ' + data.contact,\n  'Where they found it: ' + (data.where || '(not provided)'),\n  '',\n  data.story ? '--- Their story ---\\n' + data.story : '(No story provided.)',\n  '',\n  '---',\n  'Reply to this email to respond. Submitted via jimdufek.com/lostbag.',\n].join('\\r\\n');\n\nconst boundary = '----=_NextPart_' + Math.random().toString(36).slice(2, 14);\nconst headers = [\n  'From: \"' + FROM_NAME + '\" <' + FROM_EMAIL + '>',\n  'To: ' + TO_EMAIL,\n  'Reply-To: \"' + data.name + '\" <' + data.contact + '>',\n  'Subject: ' + encH(subject),\n  'MIME-Version: 1.0',\n  'Content-Type: multipart/alternative; boundary=\"' + boundary + '\"',\n];\nconst body = [\n  '--' + boundary,\n  'Content-Type: text/plain; charset=UTF-8',\n  'Content-Transfer-Encoding: 8bit', '',\n  plain, '',\n  '--' + boundary,\n  'Content-Type: text/html; charset=UTF-8',\n  'Content-Transfer-Encoding: 8bit', '',\n  html, '',\n  '--' + boundary + '--',\n];\n\nconst raw_msg = b64url(headers.join('\\r\\n') + '\\r\\n\\r\\n' + body.join('\\r\\n'));\n\nreturn [{ json: { skip: false, raw: raw_msg } }];"
+        "jsCode": "// Build the Lost Bag email\nconst raw = $input.first().json.body || $input.first().json;\n\nfunction str(v) { return v == null ? '' : String(v).trim(); }\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')\n    .replace(/\\\"/g, '&quot;').replace(/'/g, '&#39;');\n}\nfunction encH(s) {\n  if (/[^\\x00-\\x7F]/.test(s)) return '=?UTF-8?B?' + Buffer.from(s, 'utf-8').toString('base64') + '?=';\n  return s;\n}\nfunction b64url(s) {\n  return Buffer.from(s, 'utf-8').toString('base64').replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n}\n\nconst data = {\n  name:    str(raw['Name']),\n  contact: str(raw['Contact']),\n  where:   str(raw['Where']),\n  story:   str(raw['Story']),\n  gotcha:  str(raw['_gotcha']),\n};\n\n// Geo-block: high-risk countries (sanctions + high-spam regions, no realistic legit business).\n// Country codes per ISO 3166-1 alpha-2; cf-ipcountry set by Cloudflare.\nconst _country = ($input.first().json.headers && $input.first().json.headers['cf-ipcountry']) || '';\nconst _blockedCountries = ['XK','AL','RU','BY','IR','KP','CU','SY','NG','PK','BD'];\nif (_blockedCountries.includes(_country)) return [{ json: { skip: true, reason: `country_blocked_${_country}` } }];\n\nif (data.gotcha) return [{ json: { skip: true, reason: 'honeypot' } }];\nif (!data.name || !data.contact) {\n  throw new Error('Missing required fields: name or contact');\n}\n\nconst FROM_NAME = 'Lost Bag Bot';\nconst FROM_EMAIL = 'jim@gatortec.com';\nconst TO_EMAIL = 'jim@jimdufek.com';\n\nconst subject = 'Lost bag tip from ' + data.name;\n\nconst rows = [\n  ['Name', data.name],\n  ['How to reach them', data.contact],\n  ['Where they found it', data.where || '(not provided)'],\n];\n\nfunction rowsHtml(rs) {\n  return rs.map((r, i) => {\n    const bg = i % 2 === 0 ? '#f5f7fa' : '#ffffff';\n    return '<tr><td style=\"padding:11px 16px;color:#5b6671;font-weight:600;width:38%;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:13.5px\">' + esc(r[0]) + '</td><td style=\"padding:11px 16px;color:#1a1d21;background:' + bg + ';border-bottom:1px solid #eceff2;font-size:14.5px\">' + esc(r[1]) + '</td></tr>';\n  }).join('');\n}\n\nconst html = '<!doctype html><html><body style=\"margin:0;padding:0;background:#f5f7fa;font-family:-apple-system,Helvetica,Arial,sans-serif;color:#1a1d21\">' +\n  '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;background:#f5f7fa;padding:24px 0\"><tr><td align=\"center\">' +\n  '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;max-width:620px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04)\">' +\n  '<tr><td style=\"background:#2a1a0a;color:#fbf2d2;padding:22px 32px\">' +\n    '<div style=\"font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:4px\">jimdufek.com</div>' +\n    '<div style=\"font-size:22px;font-weight:700\">Someone found your bag.</div>' +\n  '</td></tr>' +\n  '<tr><td style=\"padding:28px 32px 8px\">' +\n    '<p style=\"margin:0 0 22px;font-size:15px;line-height:1.55\">A tip came in via the lost-bag page. Reach out via the contact below \\u2014 and pay the reward.</p>' +\n    '<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid #dde1e6\">' +\n      rowsHtml(rows) +\n    '</table>' +\n    (data.story ? ('<div style=\"margin-top:24px\">' +\n      '<div style=\"font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b6671;margin-bottom:8px\">Their story</div>' +\n      '<div style=\"background:#f5f7fa;border-left:3px solid #c9a04b;padding:14px 18px;border-radius:6px;font-size:15px;line-height:1.55;color:#1a1d21;white-space:pre-wrap\">' + esc(data.story) + '</div>' +\n    '</div>') : '') +\n  '</td></tr>' +\n  '<tr><td style=\"padding:18px 32px 28px;border-top:1px solid #eceff2\">' +\n    '<p style=\"margin:0;font-size:12.5px;line-height:1.5;color:#8b95a0\">Reply to this email to respond directly. Submitted via jimdufek.com/lostbag.</p>' +\n  '</td></tr>' +\n  '</table></td></tr></table></body></html>';\n\nconst plain = [\n  'A lost-bag tip came in via jimdufek.com/lostbag.',\n  '',\n  'Name: ' + data.name,\n  'How to reach them: ' + data.contact,\n  'Where they found it: ' + (data.where || '(not provided)'),\n  '',\n  data.story ? '--- Their story ---\\n' + data.story : '(No story provided.)',\n  '',\n  '---',\n  'Reply to this email to respond. Submitted via jimdufek.com/lostbag.',\n].join('\\r\\n');\n\nconst boundary = '----=_NextPart_' + Math.random().toString(36).slice(2, 14);\nconst headers = [\n  'From: \"' + FROM_NAME + '\" <' + FROM_EMAIL + '>',\n  'To: ' + TO_EMAIL,\n  'Reply-To: \"' + data.name + '\" <' + data.contact + '>',\n  'Subject: ' + encH(subject),\n  'MIME-Version: 1.0',\n  'Content-Type: multipart/alternative; boundary=\"' + boundary + '\"',\n];\nconst body = [\n  '--' + boundary,\n  'Content-Type: text/plain; charset=UTF-8',\n  'Content-Transfer-Encoding: 8bit', '',\n  plain, '',\n  '--' + boundary,\n  'Content-Type: text/html; charset=UTF-8',\n  'Content-Transfer-Encoding: 8bit', '',\n  html, '',\n  '--' + boundary + '--',\n];\n\nconst raw_msg = b64url(headers.join('\\r\\n') + '\\r\\n\\r\\n' + body.join('\\r\\n'));\n\nreturn [{ json: { skip: false, raw: raw_msg } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        440,
-        720
+        -416,
+        2608
       ],
-      "id": "lostbag-code-001",
+      "id": "6326bfc0-42af-476b-a445-405a193fe8b0",
       "name": "Code (Build Lost Bag Message)"
     },
     {
@@ -253,7 +255,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "loose"
+            "typeValidation": "loose",
+            "version": 1
           },
           "conditions": [
             {
@@ -272,10 +275,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        680,
-        720
+        -176,
+        2608
       ],
-      "id": "lostbag-if-001",
+      "id": "f08189a1-626c-4427-8eff-6cdbe1a643e5",
       "name": "If not honeypot (Lost Bag)"
     },
     {
@@ -295,10 +298,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        920,
-        720
+        64,
+        2608
       ],
-      "id": "lostbag-send-001",
+      "id": "7a46f181-fabd-47cd-8bf5-bc8443df2d2b",
       "name": "Send via Gmail API (Lost Bag)",
       "credentials": {
         "gmailOAuth2": {
@@ -318,13 +321,14 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        1160,
-        720
+        304,
+        2608
       ],
-      "id": "lostbag-resp-001",
+      "id": "ab8f0857-276e-4c83-9ad9-42d0ecb8722b",
       "name": "Respond OK (Lost Bag)"
     }
   ],
+  "pinData": {},
   "connections": {
     "Webhook (B2B Form)": {
       "main": [
@@ -458,8 +462,7 @@
             "type": "main",
             "index": 0
           }
-        ],
-        []
+        ]
       ]
     },
     "Send via Gmail API (Lost Bag)": {
@@ -474,12 +477,16 @@
       ]
     }
   },
+  "active": true,
   "settings": {
     "executionOrder": "v1",
-    "timezone": "America/New_York"
+    "binaryMode": "separate"
   },
-  "active": false,
+  "versionId": "531093aa-b1d2-4bdb-a978-509cfd8b07d9",
   "meta": {
-    "description": "GatorTec contact form handler \u2014 replaces Formspree.\n\nTwo webhook endpoints:\n  - /webhook/contact-b2b  \u2014 receives B2B form posts\n  - /webhook/contact-store \u2014 receives consumer/home form posts\n\nFor each:\n  1. Webhook receives the form-encoded POST\n  2. Code node parses fields, honeypot-checks, builds an RFC822 MIME message with From: b2b@/store@\n  3. IF node skips on honeypot detection\n  4. HTTP Request POSTs the raw message to gmail.googleapis.com/v1/users/me/messages/send using Jim's Gmail OAuth credential\n     (Gmail honors the From header because b2b@ and store@ are verified Send-As aliases on Jim's account)\n  5. Respond node returns 303 redirect to /contact/thanks.html\n\nEmail shape:\n  From:     GatorTec B2B <b2b@gatortec.com>  (or 'GatorTec Store <store@gatortec.com>')\n  To:       customer\n  Cc:       b2b@ (or store@) \u2014 internal copy\n  Reply-To: customer email\n  Subject:  'New B2B inquiry \u2014 Company (Name)' or 'New consumer inquiry \u2014 Name'\n  Body:     Plain text with all form fields\n\nSetup:\n  1. Import this JSON\n  2. Confirm the Gmail OAuth credential is Jim's account (credentials id may differ in your instance)\n  3. Activate the workflow\n  4. Test with a real form submission from the site\n\nWhy HTTP Request instead of the Gmail node: n8n's Gmail node in some versions doesn't expose the 'From' header for Send-As aliases. Calling the Gmail REST API directly via HTTP Request gives us full control of the message envelope \u2014 the OAuth credential authenticates as jim@, but the From header can be any verified alias (b2b@ or store@)."
-  }
+    "instanceId": "696a0ba8a4fcd1dee21720b36348953d9076e384585687a59b8ff11fea8545ee"
+  },
+  "nodeGroups": [],
+  "id": "Pou4E2CqJ1jBb63x",
+  "tags": []
 }

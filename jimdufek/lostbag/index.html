@@ -236,7 +236,7 @@
     border: 2px dashed #1a0d04; padding: 8px 10px;
   }
   .field textarea:focus { border-style: solid; border-color: #8a1a1a; }
-  .honeypot { position: absolute; left: -9999px; opacity: 0; }
+  .form-extra { position: absolute; left: -9999px; opacity: 0; }
   button[type="submit"] {
     display: block; margin: 24px auto 8px;
     background: #1a0d04; color: #fbf2d2;
@@ -411,7 +411,12 @@
     <div class="ok-banner" id="ok-banner">Thanks. I'll be in touch — and the reward stands.</div>
 
     <form id="lostbag-form" action="https://gatortec.app.n8n.cloud/webhook/lostbag" method="POST">
-      <input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave blank">
+      <!-- Spam controls. _alt_contact = honeypot (visually hidden, real users
+           never see it). _form_ts = page-load timestamp; n8n rejects submissions
+           that arrive < 3s after load. Don't rename without also updating the
+           n8n workflow (Code node: Build Lost Bag Message). -->
+      <input type="text"   name="_alt_contact" id="lb-alt-contact" class="form-extra" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave blank">
+      <input type="hidden" name="_form_ts"     id="lb-form-ts" value="">
 
       <div class="field">
         <label for="name">Your name</label>
@@ -461,6 +466,8 @@
     var form = document.getElementById('lostbag-form');
     var banner = document.getElementById('ok-banner');
     if (!form) return;
+    var ts = form.querySelector('#lb-form-ts');
+    if (ts) ts.value = Date.now();
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var data = new FormData(form);

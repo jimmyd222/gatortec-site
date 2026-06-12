@@ -58,6 +58,9 @@
 # Source: Search Console export, June 2026.
 # ============================================================================
 
+# Legacy email-signature logo — explicit allow MUST come before the wp-content/* 410
+/wp-content/uploads/2025/02/GTretinawhite2-small.png  /wp-content/uploads/2025/02/GTretinawhite2-small.png  200
+
 # WordPress hack artifacts
 /wp-content/*                  /                                         410
 /wp-includes/*                 /                                         410

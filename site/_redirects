@@ -13,6 +13,9 @@
 /iphone-5-battery-program      /service/                      301
 /iphone-5-battery-program/     /service/                      301
 /products                      /products/                     301
+/consumer/products/apple-ipads/ /products/ipads/              301
+/consumer/products/            /products/                     301
+/consumer/products/*           /products/                     301
 /service                       /service/                      301
 /shop                          /upgraded/                     301
 /shop/                         /upgraded/                     301

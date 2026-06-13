@@ -10,7 +10,10 @@
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
-      "position": [1168, 208],
+      "position": [
+        1168,
+        208
+      ],
       "id": "23328fd8-d13c-4ba5-86d9-aa3686f11f02",
       "name": "Webhook",
       "webhookId": "7e77a13f-968f-4fa4-8e81-4dd99ce1d1f2"
@@ -21,7 +24,10 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1392, 208],
+      "position": [
+        1392,
+        208
+      ],
       "id": "662c22c3-58fe-4c4b-a6f8-70bbc7ef38fe",
       "name": "Parse Slack Payload"
     },
@@ -33,7 +39,10 @@
       },
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1600, 80],
+      "position": [
+        1600,
+        80
+      ],
       "id": "0c74d058-4e46-48ec-ab16-f4e48143b1fc",
       "name": "Respond to Slack"
     },
@@ -63,9 +72,45 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1600, 320],
+      "position": [
+        1600,
+        320
+      ],
       "id": "if-vm-bounce-router-aaaa-bbbb-cccc-dddddddddddd",
       "name": "Is VM Bounce?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "listen-vm-check-001",
+              "leftValue": "={{ $json.action_id }}",
+              "rightValue": "listen_vm",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1824,
+        320
+      ],
+      "id": "if-listen-vm-aaaa-bbbb-cccc-dddddddddddd",
+      "name": "Is Listen?"
     },
     {
       "parameters": {
@@ -85,7 +130,10 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [1824, 480],
+      "position": [
+        1824,
+        480
+      ],
       "id": "fwd-vm-bounce-aaaa-bbbb-cccc-dddddddddddd",
       "name": "Forward to VM Bounce"
     },
@@ -95,12 +143,15 @@
         "url": "={{ $('Parse Slack Payload').first().json.response_url }}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ \"replace_original\": true, \"text\": \"⏳ Generating your S2W reports... this takes a couple minutes.\" }",
+        "jsonBody": "={ \"replace_original\": true, \"text\": \"\u23f3 Generating your S2W reports... this takes a couple minutes.\" }",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [1824, 208],
+      "position": [
+        1824,
+        208
+      ],
       "id": "f9b3ecd6-c09e-45b6-97cd-796f425dab4c",
       "name": "Update Slack - Generating"
     },
@@ -124,7 +175,10 @@
       "name": "Read GDV from Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [2048, 80],
+      "position": [
+        2048,
+        80
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "SH3KragVhEnhfwCY",
@@ -140,7 +194,10 @@
       "name": "Format for Apple Template",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2272, 80]
+      "position": [
+        2272,
+        80
+      ]
     },
     {
       "parameters": {
@@ -159,7 +216,10 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [2496, 80],
+      "position": [
+        2496,
+        80
+      ],
       "id": "11fea842-ffd7-4ffa-84be-a604a697e6ab",
       "name": "Sales HTTP Request",
       "executeOnce": true
@@ -170,12 +230,15 @@
         "options": {
           "channelId": "C0AS3PW6BP1",
           "fileName": "=",
-          "initialComment": "=📊 S2W Sales Report — week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
+          "initialComment": "=\ud83d\udcca S2W Sales Report \u2014 week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
         }
       },
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.4,
-      "position": [2720, 80],
+      "position": [
+        2720,
+        80
+      ],
       "id": "5bf2ec8a-233b-4bc0-afbc-48699f8fa447",
       "name": "Upload Sales File",
       "webhookId": "35773281-a8ec-4dc8-b381-f9ce69853dcb",
@@ -224,7 +287,10 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [2048, 320],
+      "position": [
+        2048,
+        320
+      ],
       "id": "09a14e19-44ef-45b3-ab9b-5e58e9c101d0",
       "name": "Inventory Request RS"
     },
@@ -234,7 +300,10 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2272, 320],
+      "position": [
+        2272,
+        320
+      ],
       "id": "32e682b8-fa06-48cb-af1f-01f404647ed4",
       "name": "Inventory Code"
     },
@@ -255,7 +324,10 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [2496, 320],
+      "position": [
+        2496,
+        320
+      ],
       "id": "f573a10b-5f5f-44f0-93d6-746250b7f704",
       "name": "Inventory HTTP Request",
       "executeOnce": true
@@ -266,12 +338,15 @@
         "options": {
           "channelId": "C0AS3PW6BP1",
           "fileName": "=",
-          "initialComment": "=📦 S2W Inventory Report — week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
+          "initialComment": "=\ud83d\udce6 S2W Inventory Report \u2014 week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
         }
       },
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.4,
-      "position": [2720, 320],
+      "position": [
+        2720,
+        320
+      ],
       "id": "5cc04800-6102-4e72-9251-1f3209cc95f3",
       "name": "Upload Inventory File",
       "webhookId": "45b58e76-5ace-4922-8f26-f32affe5f963",
@@ -286,7 +361,10 @@
       "parameters": {},
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [2944, 208],
+      "position": [
+        2944,
+        208
+      ],
       "id": "c576a0f1-ccdc-4896-a5e2-fb9d62634a2e",
       "name": "Wait for Both Uploads"
     },
@@ -296,12 +374,15 @@
         "url": "={{ $('Parse Slack Payload').first().json.response_url }}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ \"replace_original\": true, \"text\": \"✅ S2W reports generated and posted for week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}\" }",
+        "jsonBody": "={ \"replace_original\": true, \"text\": \"\u2705 S2W reports generated and posted for week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}\" }",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
-      "position": [3168, 208],
+      "position": [
+        3168,
+        208
+      ],
       "id": "b2e4257b-03c6-4e69-ab9b-8e81f571ee78",
       "name": "Update Slack - Done"
     }
@@ -309,56 +390,176 @@
   "pinData": {},
   "connections": {
     "Webhook": {
-      "main": [[{ "node": "Parse Slack Payload", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Parse Slack Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Parse Slack Payload": {
       "main": [
         [
-          { "node": "Respond to Slack", "type": "main", "index": 0 },
-          { "node": "Is VM Bounce?", "type": "main", "index": 0 }
+          {
+            "node": "Respond to Slack",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is VM Bounce?",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Is VM Bounce?": {
       "main": [
-        [{ "node": "Forward to VM Bounce", "type": "main", "index": 0 }],
-        [{ "node": "Update Slack - Generating", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Forward to VM Bounce",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Listen?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Update Slack - Generating": {
       "main": [
         [
-          { "node": "Read GDV from Google Sheets", "type": "main", "index": 0 },
-          { "node": "Inventory Request RS", "type": "main", "index": 0 }
+          {
+            "node": "Read GDV from Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Inventory Request RS",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Read GDV from Google Sheets": {
-      "main": [[{ "node": "Format for Apple Template", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Format for Apple Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Format for Apple Template": {
-      "main": [[{ "node": "Sales HTTP Request", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Sales HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Sales HTTP Request": {
-      "main": [[{ "node": "Upload Sales File", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Upload Sales File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Upload Sales File": {
-      "main": [[{ "node": "Wait for Both Uploads", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Wait for Both Uploads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Inventory Request RS": {
-      "main": [[{ "node": "Inventory Code", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Inventory Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Inventory Code": {
-      "main": [[{ "node": "Inventory HTTP Request", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Inventory HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Inventory HTTP Request": {
-      "main": [[{ "node": "Upload Inventory File", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Upload Inventory File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Upload Inventory File": {
-      "main": [[{ "node": "Wait for Both Uploads", "type": "main", "index": 1 }]]
+      "main": [
+        [
+          {
+            "node": "Wait for Both Uploads",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     },
     "Wait for Both Uploads": {
-      "main": [[{ "node": "Update Slack - Done", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Update Slack - Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Listen?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update Slack - Generating",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,

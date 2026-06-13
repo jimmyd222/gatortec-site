@@ -1,0 +1,377 @@
+{
+  "name": "GDV Generate Excel Reports v2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gdv-button",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [1168, 208],
+      "id": "23328fd8-d13c-4ba5-86d9-aa3686f11f02",
+      "name": "Webhook",
+      "webhookId": "7e77a13f-968f-4fa4-8e81-4dd99ce1d1f2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.body?.payload || $input.first().json.payload || '{}';\nconst payload = JSON.parse(decodeURIComponent(raw));\nreturn [{\n  json: {\n    response_url: payload.response_url,\n    action_id: payload.actions?.[0]?.action_id,\n    user: payload.user?.name\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1392, 208],
+      "id": "662c22c3-58fe-4c4b-a6f8-70bbc7ef38fe",
+      "name": "Parse Slack Payload"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"text\": \"Got it!\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1600, 80],
+      "id": "0c74d058-4e46-48ec-ab16-f4e48143b1fc",
+      "name": "Respond to Slack"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "vm-bounce-check-001",
+              "leftValue": "={{ $json.action_id }}",
+              "rightValue": "bounce_to_consumer",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1600, 320],
+      "id": "if-vm-bounce-router-aaaa-bbbb-cccc-dddddddddddd",
+      "name": "Is VM Bounce?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gatortec.app.n8n.cloud/webhook/slack-vm-bounce",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "payload",
+              "value": "={{ $('Webhook').first().json.body.payload }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [1824, 480],
+      "id": "fwd-vm-bounce-aaaa-bbbb-cccc-dddddddddddd",
+      "name": "Forward to VM Bounce"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parse Slack Payload').first().json.response_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"replace_original\": true, \"text\": \"⏳ Generating your S2W reports... this takes a couple minutes.\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [1824, 208],
+      "id": "f9b3ecd6-c09e-45b6-97cd-796f425dab4c",
+      "name": "Update Slack - Generating"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EolT-rt_mDE3f7Ky4JUpf5BX9czVZkCg7mRfQmbVBBo",
+          "mode": "list",
+          "cachedResultName": "Apple Product Sales",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EolT-rt_mDE3f7Ky4JUpf5BX9czVZkCg7mRfQmbVBBo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "6f5820e4-caa9-4a13-8500-619fc01669c5",
+      "name": "Read GDV from Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [2048, 80],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SH3KragVhEnhfwCY",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(i => i.json);\nreturn items.map(item => ({\n  json: {\n    'Sales Location ID': item['Location'] || '',\n    'Apple Marketing Part number': item['Apple Product #'] || '',\n    'UPC Code': '',\n    'JAN Code': '',\n    'Sell Through Sold Quantity': item['Sold Qty'] || 0,\n    'Sell Through Returned Quantity': item['Returned Qty'] || 0,\n    'Serial Numbers': '',\n    'Unit Selling Price': '',\n    'Invoice No': item['Invoice #'] || '',\n    'Invoice Line Item No': '',\n    'Invoice Date': item['Invoice Date'] || '',\n    'End Customer ID': '',\n    'End Customer Name': item['EU Company'] || '',\n    'End Customer Address': item['EU Address'] || '',\n    'End Customer City': item['EU City'] || '',\n    'End Customer Province State': '',\n    'End Customer Postal Zip code': '',\n    'End Customer Country or Region': item['Country'] || '',\n    'End Customer Type': item['Type'] || 'EN',\n    'Errors': ''\n  }\n}));"
+      },
+      "id": "2ee2fecf-fc88-4f59-b0da-63b4a2703565",
+      "name": "Format for Apple Template",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2272, 80]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://s2w-builder.jim-866.workers.dev",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"type\": \"sales\", \"rows\": $input.all().map(i => i.json) } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [2496, 80],
+      "id": "11fea842-ffd7-4ffa-84be-a604a697e6ab",
+      "name": "Sales HTTP Request",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "options": {
+          "channelId": "C0AS3PW6BP1",
+          "fileName": "=",
+          "initialComment": "=📊 S2W Sales Report — week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [2720, 80],
+      "id": "5bf2ec8a-233b-4bc0-afbc-48699f8fa447",
+      "name": "Upload Sales File",
+      "webhookId": "35773281-a8ec-4dc8-b381-f9ce69853dcb",
+      "credentials": {
+        "slackApi": {
+          "id": "4If1uX9M5Ew9Tx6h",
+          "name": "The RepairShopr Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://gatortec.repairshopr.com/api/v1/products",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "__PASTE_REPAIRSHOPR_API_KEY__"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ parseInt($response.body.meta.page) + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body?.products?.length === 0 }}",
+              "limitPagesFetched": true,
+              "maxRequests": 450
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [2048, 320],
+      "id": "09a14e19-44ef-45b3-ab9b-5e58e9c101d0",
+      "name": "Inventory Request RS"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\nfor (const item of $input.all()) {\n  const products = item.json.products || [];\n\n  for (const p of products) {\n    const cat = (p.product_category || '').toLowerCase();\n    if (!cat.includes('apple retail')) continue;\n\n    const qty = (p.location_quantities || []).reduce((sum, lq) => sum + (parseInt(lq.quantity) || 0), 0);\n    if (qty <= 0) continue;\n\n    let sku = (p.name || '').trim();\n    if (sku.startsWith('Z') && sku.length > 4) sku = sku.substring(0, 4);\n\n    results.push({\n      json: {\n        'Inventory Location ID': '745667',\n        'Apple Marketing Part number': sku,\n        'UPC code': '',\n        'JAN Code': '',\n        'Inventory Free Quantity': qty,\n        'Inventory Demo Quantity': '',\n        'Inventory Internal In-transit Quantity': '',\n        'Inventory Non-Sellable Quantity': '',\n        'Inventory Reserved Quantity': '',\n        'Inventory Back Order Quantity': '',\n        'Inventory Received Quantity': '',\n        'Errors': ''\n      }\n    });\n  }\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2272, 320],
+      "id": "32e682b8-fa06-48cb-af1f-01f404647ed4",
+      "name": "Inventory Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://s2w-builder.jim-866.workers.dev",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"type\": \"inventory\", \"rows\": $input.all().map(i => i.json) } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [2496, 320],
+      "id": "f573a10b-5f5f-44f0-93d6-746250b7f704",
+      "name": "Inventory HTTP Request",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "options": {
+          "channelId": "C0AS3PW6BP1",
+          "fileName": "=",
+          "initialComment": "=📦 S2W Inventory Report — week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}"
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [2720, 320],
+      "id": "5cc04800-6102-4e72-9251-1f3209cc95f3",
+      "name": "Upload Inventory File",
+      "webhookId": "45b58e76-5ace-4922-8f26-f32affe5f963",
+      "credentials": {
+        "slackApi": {
+          "id": "4If1uX9M5Ew9Tx6h",
+          "name": "The RepairShopr Bot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2944, 208],
+      "id": "c576a0f1-ccdc-4896-a5e2-fb9d62634a2e",
+      "name": "Wait for Both Uploads"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parse Slack Payload').first().json.response_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"replace_original\": true, \"text\": \"✅ S2W reports generated and posted for week of {{ new Date(new Date().getTime() - (new Date().getDay() === 0 ? 0 : new Date().getDay()) * 86400000 - 86400000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) }}\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [3168, 208],
+      "id": "b2e4257b-03c6-4e69-ab9b-8e81f571ee78",
+      "name": "Update Slack - Done"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Parse Slack Payload", "type": "main", "index": 0 }]]
+    },
+    "Parse Slack Payload": {
+      "main": [
+        [
+          { "node": "Respond to Slack", "type": "main", "index": 0 },
+          { "node": "Is VM Bounce?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Is VM Bounce?": {
+      "main": [
+        [{ "node": "Forward to VM Bounce", "type": "main", "index": 0 }],
+        [{ "node": "Update Slack - Generating", "type": "main", "index": 0 }]
+      ]
+    },
+    "Update Slack - Generating": {
+      "main": [
+        [
+          { "node": "Read GDV from Google Sheets", "type": "main", "index": 0 },
+          { "node": "Inventory Request RS", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Read GDV from Google Sheets": {
+      "main": [[{ "node": "Format for Apple Template", "type": "main", "index": 0 }]]
+    },
+    "Format for Apple Template": {
+      "main": [[{ "node": "Sales HTTP Request", "type": "main", "index": 0 }]]
+    },
+    "Sales HTTP Request": {
+      "main": [[{ "node": "Upload Sales File", "type": "main", "index": 0 }]]
+    },
+    "Upload Sales File": {
+      "main": [[{ "node": "Wait for Both Uploads", "type": "main", "index": 0 }]]
+    },
+    "Inventory Request RS": {
+      "main": [[{ "node": "Inventory Code", "type": "main", "index": 0 }]]
+    },
+    "Inventory Code": {
+      "main": [[{ "node": "Inventory HTTP Request", "type": "main", "index": 0 }]]
+    },
+    "Inventory HTTP Request": {
+      "main": [[{ "node": "Upload Inventory File", "type": "main", "index": 0 }]]
+    },
+    "Upload Inventory File": {
+      "main": [[{ "node": "Wait for Both Uploads", "type": "main", "index": 1 }]]
+    },
+    "Wait for Both Uploads": {
+      "main": [[{ "node": "Update Slack - Done", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0055baaf-d593-4098-9c9f-e84d7b6d5bda",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "696a0ba8a4fcd1dee21720b36348953d9076e384585687a59b8ff11fea8545ee"
+  },
+  "nodeGroups": [],
+  "id": "fzTdDckANAwd7uT3",
+  "tags": []
+}

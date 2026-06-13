@@ -1,0 +1,65 @@
+{
+  "name": "B2B VM to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b2b-vm-slack",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-432, -64],
+      "id": "a1b2c3d4-1111-2222-3333-444455556666",
+      "name": "VM Webhook",
+      "webhookId": "b2b-vm-slack-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "const vm = $input.first().json.body || $input.first().json;\n\nfunction formatPhone(p) {\n  if (!p) return 'Unknown';\n  const digits = String(p).replace(/\\D/g, '');\n  if (digits.length === 11 && digits.startsWith('1')) {\n    return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;\n  }\n  if (digits.length === 10) {\n    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;\n  }\n  return String(p);\n}\n\nfunction formatTime(iso) {\n  if (!iso) return 'Just now';\n  const d = new Date(iso);\n  return d.toLocaleString('en-US', {\n    timeZone: 'America/New_York',\n    month: 'short', day: 'numeric',\n    hour: 'numeric', minute: '2-digit', hour12: true\n  }) + ' ET';\n}\n\nconst caller = formatPhone(vm.from);\nconst received = formatTime(vm.timestamp);\nconst transcription = (vm.transcription || '_No transcription available_').trim();\nconst recordingUrl = vm.recordingUrl || '';\nconst preview = transcription.length > 140 ? transcription.slice(0, 140) + '…' : transcription;\n\nconst blocks = [\n  {\n    type: 'header',\n    text: { type: 'plain_text', text: '📞 New B2B Voicemail' }\n  },\n  {\n    type: 'section',\n    fields: [\n      { type: 'mrkdwn', text: `*From:*\\n${caller}` },\n      { type: 'mrkdwn', text: `*Received:*\\n${received}` }\n    ]\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Transcription:*\\n>${transcription.replace(/\\n/g, '\\n>')}`\n    }\n  }\n];\n\nif (recordingUrl) {\n  blocks.push({\n    type: 'actions',\n    elements: [\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: '🎧 Listen to recording' },\n        url: recordingUrl,\n        action_id: 'listen_vm'\n      }\n    ]\n  });\n}\n\nconst slackBody = JSON.stringify({\n  channel: 'b2b-voicemails',\n  username: 'B2B VM Bot',\n  text: `📞 New B2B voicemail from ${caller}: ${preview}`,\n  blocks: blocks\n});\n\nreturn [{ json: { slackBody } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-224, -64],
+      "id": "b2c3d4e5-2222-3333-4444-555566667777",
+      "name": "Format Slack Message"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __PASTE_SLACK_BOT_TOKEN_HERE__"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.slackBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [-16, -64],
+      "id": "c3d4e5f6-3333-4444-5555-666677778888",
+      "name": "Post to Slack"
+    }
+  ],
+  "connections": {
+    "VM Webhook": {
+      "main": [[{ "node": "Format Slack Message", "type": "main", "index": 0 }]]
+    },
+    "Format Slack Message": {
+      "main": [[{ "node": "Post to Slack", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

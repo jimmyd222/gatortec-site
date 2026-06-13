@@ -1,0 +1,120 @@
+{
+  "name": "B2B VM Slack Bounce",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "slack-vm-bounce",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-640, 0],
+      "id": "d4e5f6a7-aaaa-1111-2222-333344445555",
+      "name": "Slack Bounce Webhook",
+      "webhookId": "slack-vm-bounce-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Slack sends interactivity payloads as form-urlencoded with a single 'payload'\n// field containing JSON-encoded data.\nconst body = $input.first().json.body || $input.first().json;\nlet payload;\ntry {\n  payload = typeof body.payload === 'string' ? JSON.parse(body.payload) : body.payload;\n} catch (e) {\n  throw new Error('Failed to parse Slack payload: ' + e.message);\n}\n\nconst action = (payload.actions || []).find(a => a.action_id === 'bounce_to_consumer');\nif (!action) {\n  throw new Error('No bounce_to_consumer action in payload');\n}\n\nconst callerPhone = action.value;\nif (!callerPhone) {\n  throw new Error('No phone number in action value');\n}\n\nfunction formatTime(iso) {\n  const d = new Date(iso);\n  return d.toLocaleString('en-US', {\n    timeZone: 'America/New_York',\n    hour: 'numeric', minute: '2-digit', hour12: true\n  }) + ' ET';\n}\n\nconst nowIso = new Date().toISOString();\n\nreturn [{\n  json: {\n    callerPhone: callerPhone,\n    userId: payload.user.id,\n    userName: payload.user.username || payload.user.name,\n    channelId: payload.channel.id,\n    messageTs: payload.message.ts,\n    originalBlocks: payload.message.blocks || [],\n    timestamp: nowIso,\n    formattedTime: formatTime(nowIso)\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-432, 0],
+      "id": "e5f6a7b8-bbbb-2222-3333-444455556666",
+      "name": "Parse Action Payload"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/__PASTE_TWILIO_ACCOUNT_SID__/Calls.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "twilioApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "From",
+              "value": "+13525057582"
+            },
+            {
+              "name": "To",
+              "value": "={{ $json.callerPhone }}"
+            },
+            {
+              "name": "Twiml",
+              "value": "<Response><Play>https://gatortec.com/twilio-phone-recordings-2026/b2b-callback.mp3</Play><Hangup/></Response>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [-224, 0],
+      "id": "f6a7b8c9-cccc-3333-4444-555566667777",
+      "name": "Place Twilio Call",
+      "credentials": {
+        "twilioApi": {
+          "id": "__N8N_TWILIO_CREDENTIAL_ID__",
+          "name": "GatorTec Twilio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Update the original Slack message: strip the Bounce button, add a context line\nconst parsed = $('Parse Action Payload').first().json;\nconst originalBlocks = parsed.originalBlocks || [];\n\nconst updatedBlocks = [];\nfor (const block of originalBlocks) {\n  if (block.type === 'actions') {\n    const remaining = (block.elements || []).filter(e => e.action_id !== 'bounce_to_consumer');\n    if (remaining.length) {\n      updatedBlocks.push({ ...block, elements: remaining });\n    }\n  } else {\n    updatedBlocks.push(block);\n  }\n}\n\nupdatedBlocks.push({\n  type: 'context',\n  elements: [{\n    type: 'mrkdwn',\n    text: `✅ Bounced to consumer line by <@${parsed.userId}> at ${parsed.formattedTime}`\n  }]\n});\n\nreturn [{\n  json: {\n    slackBody: JSON.stringify({\n      channel: parsed.channelId,\n      ts: parsed.messageTs,\n      blocks: updatedBlocks,\n      text: 'Voicemail bounced to consumer line'\n    })\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-16, 0],
+      "id": "a7b8c9d0-dddd-4444-5555-666677778888",
+      "name": "Build Update Message"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.update",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer __PASTE_SLACK_BOT_TOKEN_HERE__"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.slackBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [192, 0],
+      "id": "b8c9d0e1-eeee-5555-6666-777788889999",
+      "name": "Update Slack Message"
+    }
+  ],
+  "connections": {
+    "Slack Bounce Webhook": {
+      "main": [[{ "node": "Parse Action Payload", "type": "main", "index": 0 }]]
+    },
+    "Parse Action Payload": {
+      "main": [[{ "node": "Place Twilio Call", "type": "main", "index": 0 }]]
+    },
+    "Place Twilio Call": {
+      "main": [[{ "node": "Build Update Message", "type": "main", "index": 0 }]]
+    },
+    "Build Update Message": {
+      "main": [[{ "node": "Update Slack Message", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}
